@@ -1,0 +1,295 @@
+#include "TH1D.h"
+#include "TCanvas.h"
+#include "TPad.h"
+#include "TF1.h"
+#include "TH1.h"
+#include "TH2.h"
+
+#include "TFrame.h"
+#include "TROOT.h"
+#include "TRandom.h"
+#include "TRandom3.h"
+#include "TFormula.h"
+#include "TPaveLabel.h"
+#include "TFile.h"
+#include "TMath.h"
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <vector>
+
+#define PI 3.14159
+#define TWOPI 6.28318
+
+  std::ifstream file;
+
+  int eventnum=0;
+  int testdummy=0;
+  int number_particles=0;
+  double b_impact=0;
+  int npart_proj=0;
+  int npart_targ=0;
+  int nelas_proj=0;
+  int ninelas_proj=0;
+  int nelas_targ=0;
+  int ninelas_targ=0;
+  float dummy2=0;
+
+  int part_id_in=0;
+  double px_in=0;
+  double py_in=0;
+  double pz_in=0;
+  double mass_in=0;
+  double x_in=0;
+  double y_in=0;
+  double z_in=0;
+  double t_in=0;
+
+bool readit(int itype, int ido);
+
+void amptana1(int ntodo=-1) {
+  cout<<" ntodo="<<ntodo<<endl;
+
+  std::vector<int> eventnum_v;
+  std::vector<int> number_particles_v;
+  std::vector<double> b_impact_v;
+  std::vector<int> npart_proj_v;
+  std::vector<int> npart_targ_v;
+  std::vector<int> nelas_proj_v;
+  std::vector<int> ninelas_proj_v;
+  std::vector<int> nelas_targ_v;
+  std::vector<int> ninelas_targ_v;
+  std::vector<std::vector <int>> part_id_v;
+  std::vector<std::vector <double>> px_v;
+  std::vector<std::vector <double>> py_v;
+  std::vector<std::vector <double>> pz_v;
+  std::vector<std::vector <double>> mass_v;
+  std::vector<std::vector <double>> x_v;
+  std::vector<std::vector <double>> y_v;
+  std::vector<std::vector <double>> z_v;
+  std::vector<std::vector <double>> t_v;
+  std::vector<std::vector <double>> energy_v;
+  std::vector<std::vector <double>> pt_v;
+  std::vector<std::vector <double>> rapidity_v;
+  std::vector<std::vector <double>> phi_v;
+  std::vector<std::vector <double>> eta_v;
+    
+
+  // we will define our histograms here
+  // event level
+  TH1D *number_particlesh = new TH1D("number_particlesh","number_particlesh",1000,0.,10000);
+  TH1D *b_impacth = new TH1D("impacth","impacth",100,0.,10);
+  TH1D *n_participantsh = new TH1D("n_participantsh","n_participantsh",400,0.,400.);
+  
+  // particle level
+  TH1D *part_idh = new TH1D("part_idh","part_id",1000,0.,10000);
+  TH1D *pth = new TH1D("pth","pt",100,0.,5);
+  TH2D *xvsyh = new TH2D("xvsyh","xvsyh",150,-15.,15.,150,-15.,15.);
+  TH2D *zvsth = new TH2D("zvsth","zvsth",100,-20.,20.,100,0.,20.);
+  TH2D *rvsth = new TH2D("rvsth","rvsth",100,0.,20.,100,0.,20.);
+  TH1D *rapidityh = new TH1D("rapidityh","rapidityh",100,-5.,5.);
+
+  TH1D *PSI1h = new TH1D("PSI1h","PSI1h",180,-TWOPI,TWOPI);
+  TH1D *PSI2h = new TH1D("PSI2h","PSI2h",180,-TWOPI,TWOPI);
+  TH1D *PSI3h = new TH1D("PSI3h","PSI3h",180,-TWOPI,TWOPI);
+  TH1D *PSI4h = new TH1D("PSI4h","PSI4h",180,-TWOPI,TWOPI);
+
+  int ncount=100;
+  int nev=0;
+
+  // read in event loop
+  readit(1,0);
+  
+  std::ifstream file("amptdata.dat");
+  while(file>>eventnum>>testdummy>>number_particles>>b_impact>>npart_proj>>npart_targ>>nelas_proj>>ninelas_proj>>nelas_targ>>ninelas_targ>>dummy2){
+    //    std::cout<<eventnum<<" ="<<" n particles="<<number_particles<<" b="<<b_impact<<" participants="<<npart_proj+npart_targ<<std::endl;
+
+    nev++;
+    if(nev%ncount==0)cout<<" 1 eventnum="<<eventnum<<endl;
+    if(ntodo>0 && nev > ntodo)break;
+
+    number_particlesh->Fill(number_particles);
+    b_impacth->Fill(b_impact);
+    n_participantsh->Fill(npart_proj+npart_targ);
+    
+    std::vector <int> part_id;
+    std::vector <double> px;
+    std::vector <double> py;
+    std::vector <double> pz;
+    std::vector <double> mass;
+    std::vector <double> x;
+    std::vector <double> y;
+    std::vector <double> z;
+    std::vector <double> t;
+    std::vector <double> energy;
+    std::vector <double> pt;
+    std::vector <double> rapidity;
+    std::vector <double> phi;
+    std::vector <double> eta;
+    
+    for (int i=0; i< number_particles; i++){
+      file>>part_id_in>>px_in>>py_in>>pz_in>>mass_in>>x_in>>y_in>>z_in>>t_in;
+      //      cout<<" i="<<i<<" part_id_in="<<part_id_in<<endl;
+        part_id.push_back(part_id_in);
+	px.push_back(px_in);
+	py.push_back(py_in);
+	pz.push_back(pz_in);
+	mass.push_back(mass_in);
+	x.push_back(x_in);
+	y.push_back(y_in);
+	z.push_back(z_in);
+	t.push_back(t_in);
+
+	energy.push_back(sqrt(px_in*px_in+py_in*py_in+pz_in*pz_in+mass_in*mass_in));
+	pt.push_back(sqrt(px_in*px_in+py_in*py_in));
+	rapidity.push_back(atanh(pz_in/energy[i]));
+	phi.push_back(atan2(y_in,x_in));
+	double theta=acos(pz_in/sqrt(px_in*px_in+py_in*py_in+pz_in*pz_in));
+	eta.push_back(-log(tan(theta/2.)));
+    
+    } // particle read in loop
+
+
+    eventnum_v.push_back(eventnum);
+    number_particles_v.push_back(number_particles);
+    b_impact_v.push_back(b_impact);
+    npart_proj_v.push_back(npart_proj);
+    npart_targ_v.push_back(npart_targ);
+    nelas_proj_v.push_back(nelas_proj);
+    ninelas_proj_v.push_back(ninelas_proj);
+    nelas_targ_v.push_back(nelas_targ);
+    ninelas_targ_v.push_back(ninelas_targ);
+    part_id_v.push_back(part_id);
+    px_v.push_back(px);
+    py_v.push_back(py);
+    pz_v.push_back(pz);
+    mass_v.push_back(mass);
+    x_v.push_back(x);
+    y_v.push_back(y);
+    z_v.push_back(z);
+    t_v.push_back(t);
+    energy_v.push_back(energy);
+    pt_v.push_back(pt);
+    rapidity_v.push_back(rapidity);
+    phi_v.push_back(phi);
+    eta_v.push_back(eta);        
+  } // event loop read in
+  file.close();
+  cout<<" FINISHED READING IN FILE, number of events="<<nev<<endl;
+  // nev might be 1 more than it should be!!
+
+  
+  // event loop 2
+  for(int iev=0; iev<nev; iev++){
+    if(iev%ncount==0)cout<<" 2 eventnum="<<iev<<endl;
+    if(ntodo>0 && iev > ntodo)break;
+    
+    std::vector <int> part_id;
+    std::vector <double> px;
+    std::vector <double> py;
+    std::vector <double> pz;
+    std::vector <double> mass;
+    std::vector <double> x;
+    std::vector <double> y;
+    std::vector <double> z;
+    std::vector <double> t;
+    std::vector <double> energy;
+    std::vector <double> pt;
+    std::vector <double> rapidity;
+    std::vector <double> phi;
+    std::vector <double> eta;
+    
+    eventnum=eventnum_v[iev];
+    number_particles=number_particles_v[iev];
+    b_impact=b_impact_v[iev];
+    npart_proj=npart_proj_v[iev];
+    npart_targ=npart_targ_v[iev];
+    nelas_proj=nelas_proj_v[iev];
+    ninelas_proj=ninelas_proj_v[iev];
+    nelas_targ=nelas_targ_v[iev];
+    ninelas_targ=ninelas_targ_v[iev];
+    part_id=part_id_v[iev];
+    px=px_v[iev];
+    py=py_v[iev];
+    pz=pz_v[iev];
+    mass=mass_v[iev];
+    x=x_v[iev];
+    y=y_v[iev];
+    z=z_v[iev];
+    t=t_v[iev];
+    energy=energy_v[iev];
+    pt=pt_v[iev];
+    rapidity=rapidity_v[iev];
+    phi=phi_v[iev];
+    eta=eta_v[iev];
+    
+    number_particlesh->Fill(number_particles);
+    b_impacth->Fill(b_impact);
+    n_participantsh->Fill(npart_proj+npart_targ);
+    
+    //Finding reaction plane
+    double Qx[6]={0};      // used to find the reaction plane
+    double Qy[6]={0};
+    double PSI[6]={0};
+    double Weight=1;
+    for (int i=0; i< number_particles; i++){
+      xvsyh->Fill(x[i],y[i]);
+      zvsth->Fill(z[i],t[i]);
+      rvsth->Fill(sqrt(x[i]*x[i]+y[i]*y[i]),t[i]);
+      
+      part_idh->Fill(part_id[i]);
+      pth->Fill(sqrt(px[i]*px[i]+py[i]*py[i]));
+      rapidityh->Fill(rapidity[i]);
+      
+      for(int nn=0; nn<6 ; nn++){
+	int nharmonic=nn+1;
+	Qx[nn]+=Weight*cos(nharmonic*phi[i]);
+	Qy[nn]+=Weight*sin(nharmonic*phi[i]);
+      }
+    } // particle loop
+    for(int nn=0; nn<6 ; nn++){
+      int nharmonic=nn+1;
+      PSI[nn]+=atan2(Qy[nn],Qx[nn])/nharmonic;
+    }
+    PSI1h->Fill(PSI[1-1]);
+    PSI2h->Fill(PSI[2-1]);
+    PSI3h->Fill(PSI[3-1]);
+    PSI4h->Fill(PSI[4-1]);
+    
+  } // event loop 2
+  
+  
+  // event loop 3
+  
+  
+  // Open a ROOT file and save the histograms
+  //
+  TFile *myfile = new TFile("amptana1.root","RECREATE");  
+  number_particlesh->Write();
+  b_impacth->Write();
+  n_participantsh->Write();
+
+  xvsyh->Write();
+  zvsth->Write();
+  rvsth->Write();
+  
+  part_idh->Write();
+  pth->Write();
+  rapidityh->Write();
+  PSI1h->Write();
+  PSI2h->Write();
+  PSI3h->Write();
+  PSI4h->Write();
+  
+  myfile->Close();
+}
+
+bool readit(int itype, int ido){
+  // itype =1: ampt  2: rqmd
+  // ido =0:open file, 1:read event 2:read particle -1:close file
+  cout<<" in readit itype="<<itype<<" ido="<<ido<<endl;
+
+  return true;
+}

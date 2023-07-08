@@ -1,0 +1,10 @@
+Universe       = vanilla
+Notification   = never
++Experiment    = "star"
++Job_Type      = "cas"
+GetEnv         = true
+Executable     = cl.11.5.sh
+Log            = job.log
+Output         = job.out
+Error          = job.err
+Queue

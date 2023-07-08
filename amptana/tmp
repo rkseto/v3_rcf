@@ -1,0 +1,15 @@
+#!bin/tcsh
+mkdir run_3_1M_b0-14
+mkdir run_3melt3mb_10K_b6-7
+mkdir run_5_10K_b6-7
+mkdir run_5melt3mb_10K_b6-7
+mkdir run_8_10K_b6-7
+mkdir run_8_1M_b0-14
+mkdir run_8melt3mb_10K_b6-7
+mkdir run_19_1M_b0-14
+mkdir run_19melt3mb_10K_b6-7
+mkdir run_27_1M_b0-14
+mkdir run_200_10K_b6-7
+mkdir run_200_150K_b0-14
+mkdir run_200melt3mb_10K_b6-7
+mkdir run_5000_5K_b0-2

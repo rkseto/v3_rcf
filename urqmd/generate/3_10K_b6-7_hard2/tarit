@@ -1,0 +1,13 @@
+#!/bin/tcsh
+ tar -zcvf ../tar_3_1M_b0-14_hard2_0.tgz ./job???/*
+ tar -zcvf ../tar_3_1M_b0-14_hard2_1.tgz ./job1???/*
+ tar -zcvf ../tar_3_1M_b0-14_hard2_2.tgz ./job2???/*
+ tar -zcvf ../tar_3_1M_b0-14_hard2_3.tgz ./job3???/*
+ tar -zcvf ../tar_3_1M_b0-14_hard2_4.tgz ./job4???/*
+ tar -zcvf ../tar_3_1M_b0-14_hard2_5.tgz ./job5???/*
+ tar -zcvf ../tar_3_1M_b0-14_hard2_6.tgz ./job6???/*
+ tar -zcvf ../tar_3_1M_b0-14_hard2_7.tgz ./job7???/*
+ tar -zcvf ../tar_3_1M_b0-14_hard2_8.tgz ./job8???/*
+ tar -zcvf ../tar_3_1M_b0-14_hard2_9.tgz ./job9???/*
+ tar -zcvf ../tar_3_1M_b0-14_hard2_000.tgz ./job?/*
+ tar -zcvf ../tar_3_1M_b0-14_hard2_00.tgz ./job??/*

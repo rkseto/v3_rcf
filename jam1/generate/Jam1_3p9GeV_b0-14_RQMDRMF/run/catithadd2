@@ -1,0 +1,64 @@
+#!/bin/tcsh
+
+if ( "$1" == "" ) then      # parentheses not strictly needed in this simple case
+    echo "variable 1 is empty = set it to the string-label"
+    exit
+else 
+    echo "variable contains $1"
+endif
+
+hadd $1_all_00.root convert_00??_run/event_?00.root
+hadd $1_all_01.root convert_01??_run/event_?00.root
+hadd $1_all_02.root convert_02??_run/event_?00.root
+hadd $1_all_03.root convert_03??_run/event_?00.root
+hadd $1_all_04.root convert_04??_run/event_?00.root
+hadd $1_all_05.root convert_05??_run/event_?00.root
+hadd $1_all_06.root convert_06??_run/event_?00.root
+hadd $1_all_07.root convert_07??_run/event_?00.root
+hadd $1_all_08.root convert_08??_run/event_?00.root
+hadd $1_all_09.root convert_09??_run/event_?00.root 
+
+hadd $1_all_10.root convert_10??_run/event_?00.root
+hadd $1_all_11.root convert_11??_run/event_?00.root
+hadd $1_all_12.root convert_12??_run/event_?00.root
+hadd $1_all_13.root convert_13??_run/event_?00.root
+hadd $1_all_14.root convert_14??_run/event_?00.root
+hadd $1_all_15.root convert_15??_run/event_?00.root
+hadd $1_all_16.root convert_16??_run/event_?00.root
+hadd $1_all_17.root convert_17??_run/event_?00.root
+hadd $1_all_18.root convert_18??_run/event_?00.root
+hadd $1_all_19.root convert_19??_run/event_?00.root 
+
+hadd $1_all_20.root convert_20??_run/event_?00.root
+hadd $1_all_21.root convert_21??_run/event_?00.root
+hadd $1_all_22.root convert_22??_run/event_?00.root
+hadd $1_all_23.root convert_23??_run/event_?00.root
+hadd $1_all_24.root convert_24??_run/event_?00.root
+hadd $1_all_25.root convert_25??_run/event_?00.root
+hadd $1_all_26.root convert_26??_run/event_?00.root
+hadd $1_all_27.root convert_27??_run/event_?00.root
+hadd $1_all_28.root convert_28??_run/event_?00.root
+hadd $1_all_29.root convert_29??_run/event_?00.root 
+
+hadd $1_all_30.root convert_30??_run/event_?00.root
+hadd $1_all_31.root convert_31??_run/event_?00.root
+hadd $1_all_32.root convert_32??_run/event_?00.root
+hadd $1_all_33.root convert_33??_run/event_?00.root
+hadd $1_all_34.root convert_34??_run/event_?00.root
+hadd $1_all_35.root convert_35??_run/event_?00.root
+hadd $1_all_36.root convert_36??_run/event_?00.root
+hadd $1_all_37.root convert_37??_run/event_?00.root
+hadd $1_all_38.root convert_38??_run/event_?00.root
+hadd $1_all_39.root convert_39??_run/event_?00.root 
+
+hadd $1_all_40.root convert_40??_run/event_?00.root
+hadd $1_all_41.root convert_41??_run/event_?00.root
+hadd $1_all_42.root convert_42??_run/event_?00.root
+hadd $1_all_43.root convert_43??_run/event_?00.root
+hadd $1_all_44.root convert_44??_run/event_?00.root
+hadd $1_all_45.root convert_45??_run/event_?00.root
+hadd $1_all_46.root convert_46??_run/event_?00.root
+hadd $1_all_47.root convert_47??_run/event_?00.root
+hadd $1_all_48.root convert_48??_run/event_?00.root
+hadd $1_all_49.root convert_49??_run/event_?00.root convert_50??_run/event_?00.root 
+

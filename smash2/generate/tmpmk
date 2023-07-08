@@ -1,0 +1,6 @@
+#!/bin/tcsh
+mkdir 3_b0-14_hard2SymPauli_$1\fm
+cd 3_b0-14_hard2SymPauli_$1\fm
+cp -d -r ../template_time/* .
+cd ..
+ 

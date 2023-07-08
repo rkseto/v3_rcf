@@ -1,0 +1,35 @@
+SMASH: June 15, 2022
+make n area e.g. 3_100K_b0-14_hard2SymPauli
+cd  3_100K_b0-14_hard2SymPauli
+cp -d ../template/* .
+mkdir jobs
+mkdir logs
+mkdir template   
+cd template
+cp -d ../../template/template/* .
+mv config_3*.yaml  config_3_1K_b5-9_hard2SymPauli.yaml
+ln -sf  config_3_1K_b5-9_hard2SymPauli.yaml config.yaml
+
+edit  config_3_1K_b5-9_hard2SymPauli.yaml
+
+change Nevents   (set to 100 now)
+change potentials, sqrtsnn, etc
+
+
+test the job with condor_smash.csh
+  should make a job in ./jobs and start running it
+then
+submit condor_submit.job
+
+    set the queue number - right now it is set to 1000.
+expect 90% of jobs to fail on illegal instruction - this is a CPU type problem. 
+
+make sure catit is set up correctly. Now set to expect 1000 jobs
+go to ./Data
+../catit  3_100K_b0-14_hard2SymPauli
+
+mkdir junk
+mv job* junk
+clean out  junk. clean out logs
+
+transfer rootfiles to smashana4 analysis area. now on my laptop

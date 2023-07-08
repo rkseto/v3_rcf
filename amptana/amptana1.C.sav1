@@ -1,0 +1,175 @@
+#include "TH1D.h"
+#include "TCanvas.h"
+#include "TPad.h"
+#include "TF1.h"
+#include "TH1.h"
+#include "TH2.h"
+
+#include "TFrame.h"
+#include "TROOT.h"
+#include "TRandom.h"
+#include "TRandom3.h"
+#include "TFormula.h"
+#include "TPaveLabel.h"
+#include "TFile.h"
+#include "TMath.h"
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <vector>
+
+#define PI 3.14159
+#define TWOPI 6.28318
+
+
+void amptana1() {
+
+  // we will define our histograms here
+  // event level
+  TH1D *number_particlesh = new TH1D("number_particlesh","number_particlesh",1000,0.,10000);
+  TH1D *b_impacth = new TH1D("impacth","impacth",100,0.,10);
+  TH1D *n_participantsh = new TH1D("n_participantsh","n_participantsh",400,0.,400.);
+  
+  // particle level
+  TH1D *part_idh = new TH1D("part_idh","part_id",1000,0.,10000);
+  TH1D *pth = new TH1D("pth","pt",100,0.,5);
+  TH2D *xvsyh = new TH2D("xvsyh","xvsyh",150,-15.,15.,150,-15.,15.);
+  TH2D *zvsth = new TH2D("zvsth","zvsth",100,-20.,20.,100,0.,20.);
+  TH2D *rvsth = new TH2D("rvsth","rvsth",100,0.,20.,100,0.,20.);
+  TH1D *rapidityh = new TH1D("rapidityh","rapidityh",100,-5.,5.);
+
+  TH1D *PSI1h = new TH1D("PSI1h","PSI1h",180,-TWOPI,TWOPI);
+  TH1D *PSI2h = new TH1D("PSI2h","PSI2h",180,-TWOPI,TWOPI);
+  TH1D *PSI3h = new TH1D("PSI3h","PSI3h",180,-TWOPI,TWOPI);
+  TH1D *PSI4h = new TH1D("PSI4h","PSI4h",180,-TWOPI,TWOPI);
+  
+  int eventnum=0;
+  int testdummy=0;
+  int number_particles=0;
+  double b_impact=0;
+  int npart_proj=0;
+  int npart_targ=0;
+  int nelas_proj=0;
+  int ninelas_proj=0;
+  int nelas_targ=0;
+  int ninelas_targ=0;
+  float dummy2=0;
+
+  int part_id_in=0;
+  double px_in=0;
+  double py_in=0;
+  double pz_in=0;
+  double mass_in=0;
+  double x_in=0;
+  double y_in=0;
+  double z_in=0;
+  double t_in=0;
+
+  int ncount=100;
+  
+  std::ifstream file("amptdata.dat");
+  while(file>>eventnum>>testdummy>>number_particles>>b_impact>>npart_proj>>npart_targ>>nelas_proj>>ninelas_proj>>nelas_targ>>ninelas_targ>>dummy2){
+    //    std::cout<<eventnum<<" ="<<" n particles="<<number_particles<<" b="<<b_impact<<" participants="<<npart_proj+npart_targ<<std::endl;
+
+    number_particlesh->Fill(number_particles);
+    b_impacth->Fill(b_impact);
+    n_participantsh->Fill(npart_proj+npart_targ);
+    
+    if(eventnum%ncount==0)cout<<" 1 eventnum="<<eventnum<<endl;
+    
+    std::vector <int> part_id;
+    std::vector <double> px;
+    std::vector <double> py;
+    std::vector <double> pz;
+    std::vector <double> mass;
+    std::vector <double> x;
+    std::vector <double> y;
+    std::vector <double> z;
+    std::vector <double> t;
+    std::vector <double> energy;
+    std::vector <double> pt;
+    std::vector <double> rapidity;
+    std::vector <double> phi;
+    std::vector <double> eta;
+
+    for (int i=0; i< number_particles; i++){
+      file>>part_id_in>>px_in>>py_in>>pz_in>>mass_in>>x_in>>y_in>>z_in>>t_in;
+      //      cout<<" i="<<i<<" part_id_in="<<part_id_in<<endl;
+        part_id.push_back(part_id_in);
+	px.push_back(px_in);
+	py.push_back(py_in);
+	pz.push_back(pz_in);
+	mass.push_back(mass_in);
+	x.push_back(x_in);
+	y.push_back(y_in);
+	z.push_back(z_in);
+	t.push_back(t_in);
+
+	energy.push_back(sqrt(px_in*px_in+py_in*py_in+pz_in*pz_in+mass_in*mass_in));
+	pt.push_back(sqrt(px_in*px_in+py_in*py_in));
+	rapidity.push_back(atanh(pz_in/energy[i]));
+	phi.push_back(atan2(y_in,x_in));
+	double theta=acos(pz_in/sqrt(px_in*px_in+py_in*py_in+pz_in*pz_in));
+	eta.push_back(-log(tan(theta/2.)));
+    
+    } // particle read in loop
+
+    //Finding reaction plane
+    double Qx[6]={0};      // used to find the reaction plane
+    double Qy[6]={0};
+    double PSI[6]={0};
+    double Weight=1;
+    for (int i=0; i< number_particles; i++){
+	xvsyh->Fill(x[i],y[i]);
+	zvsth->Fill(z[i],t[i]);
+	rvsth->Fill(sqrt(x[i]*x[i]+y[i]*y[i]),t[i]);
+
+	part_idh->Fill(part_id[i]);
+	pth->Fill(sqrt(px[i]*px[i]+py[i]*py[i]));
+	rapidityh->Fill(rapidity[i]);
+
+	for(int nn=0; nn<6 ; nn++){
+	  int nharmonic=nn+1;
+	  Qx[nn]+=Weight*cos(nharmonic*phi[i]);
+	  Qy[nn]+=Weight*sin(nharmonic*phi[i]);
+	}
+    } // particle loop
+    for(int nn=0; nn<6 ; nn++){
+      int nharmonic=nn+1;
+      PSI[nn]+=atan2(Qy[nn],Qx[nn])/nharmonic;
+    }
+    PSI1h->Fill(PSI[1-1]);
+    PSI2h->Fill(PSI[2-1]);
+    PSI3h->Fill(PSI[3-1]);
+    PSI4h->Fill(PSI[4-1]);
+    
+  } // event loop
+
+  file.close();
+
+  // open it a second time if need be
+  
+  // Open a ROOT file and save the histograms
+  //
+  TFile *myfile = new TFile("amptana1.root","RECREATE");  
+  number_particlesh->Write();
+  b_impacth->Write();
+  n_participantsh->Write();
+
+  xvsyh->Write();
+  zvsth->Write();
+  rvsth->Write();
+  
+  part_idh->Write();
+  pth->Write();
+  rapidityh->Write();
+  PSI1h->Write();
+  PSI2h->Write();
+  PSI3h->Write();
+  PSI4h->Write();
+  
+  myfile->Close();
+}
+

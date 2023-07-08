@@ -1,0 +1,2 @@
+NUM = 10
+RUNNAME = pnq

@@ -1,0 +1,1 @@
+../../smash-master/build/DartConfiguration.tcl

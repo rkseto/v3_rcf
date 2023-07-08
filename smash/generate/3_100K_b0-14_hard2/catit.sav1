@@ -1,0 +1,20 @@
+#!/bin/tcsh
+
+if ( "$1" == "" ) then      # parentheses not strictly needed in this simple case
+    echo "variable 1 is empty = set it to the energy"
+    exit
+else 
+    echo "variable contains $1"
+endif
+
+ cat ./job??/data/0/smashdone.oscar > smash_$1\GeV_all_0.oscar
+ cat ./job?/data/0/smashdone.oscar >> smash_$1\GeV_all_0.oscar
+ cat ./job1??/data/0/smashdone.oscar > smash_$1\GeV_all_1.oscar
+ cat ./job2??/data/0/smashdone.oscar > smash_$1\GeV_all_2.oscar
+ cat ./job3??/data/0/smashdone.oscar > smash_$1\GeV_all_3.oscar
+ cat ./job4??/data/0/smashdone.oscar > smash_$1\GeV_all_4.oscar
+ cat ./job5??/data/0/smashdone.oscar > smash_$1\GeV_all_5.oscar
+ cat ./job6??/data/0/smashdone.oscar > smash_$1\GeV_all_6.oscar
+ cat ./job7??/data/0/smashdone.oscar > smash_$1\GeV_all_7.oscar
+ cat ./job8??/data/0/smashdone.oscar > smash_$1\GeV_all_8.oscar
+ cat ./job9??/data/0/smashdone.oscar > smash_$1\GeV_all_9.oscar

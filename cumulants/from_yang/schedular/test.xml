@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job minFilesPerProcess="1" maxFilesPerProcess="1" filesPerHour="4" fileListSyntax="xrootd" simulateSubmission="false">
+	<command>
+    		starver SL22a
+		echo "FILELIST $FILELIST"
+		./QC4_f2 $FILELIST
+		mv fxt_3gev_QC24_w_1_v3*.root result_${JOBID}.root	
+	</command>
+	<input URL="filelist:/star/data01/pwg/cracz/Data_3p0GeV_FXT_QC/file.list" />
+	<stdout URL="file:./logs/shed$JOBID.out"/>
+	<stderr URL="file:./logs/shed$JOBID.err"/>
+	<output fromScratch="result_${JOBID}.root" toURL="file:/star/u/liankun/work/v3/from_yang/schedular/output_QC4_f2/"/>	
+	<SandBox installer="ZIP">
+  		<Package name="cal_QC4_f2">
+    			<File>file:./QC4_f2</File>
+  		</Package>
+	</SandBox>
+</job>

@@ -1,0 +1,23 @@
+#!/bin/tcsh
+
+if ( "$1" == "" ) then      # parentheses not strictly needed in this simple case
+    echo "variable 1 is empty = set it to the string-label"
+    exit
+else 
+    echo "variable contains $1"
+endif
+
+hadd smash2_$1_all_0.root job?/data/0/smashdone.root job??/data/0/smashdone.root
+hadd smash2_$1_all_1.root job1??/data/0/smashdone.root
+hadd smash2_$1_all_2.root job2??/data/0/smashdone.root
+hadd smash2_$1_all_3.root job3??/data/0/smashdone.root
+hadd smash2_$1_all_4.root job4??/data/0/smashdone.root
+hadd smash2_$1_all_5.root job5??/data/0/smashdone.root
+hadd smash2_$1_all_6.root job6??/data/0/smashdone.root
+hadd smash2_$1_all_7.root job7??/data/0/smashdone.root
+hadd smash2_$1_all_8.root job8??/data/0/smashdone.root
+hadd smash2_$1_all_9.root job9??/data/0/smashdone.root
+
+
+
+

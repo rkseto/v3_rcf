@@ -1,0 +1,17 @@
+           2  *           2  ->d+           3  (regular d prodn)    @evt#           1  @nt=          16
+  d+           2  (regular d B elastic) @evt#           1  @nt=          17  lb1,2=           2          42
+  d+           6  (regular d B elastic) @evt#           1  @nt=          18  lb1,2=           6          42
+  d+           3  (regular d M elastic) @evt#           1  @nt=          24  lb1,2=          42           3
+  d+           5  (regular d M elastic) @evt#           1  @nt=          36  lb1,2=          42           5
+           1  *           1  ->d+           5  (regular d prodn)    @evt#           1  @nt=          38
+  d+           3  (regular d M elastic) @evt#           1  @nt=          41  lb1,2=          42           3
+           2  *           6  ->d+           5  (regular d prodn)    @evt#           1  @nt=          69
+  d+           3  (regular d M elastic) @evt#           1  @nt=          79  lb1,2=          42           3
+  d+           3  (regular d M elastic) @evt#           1  @nt=          80  lb1,2=          42           3
+  d+           1  (regular d B elastic) @evt#           1  @nt=          82  lb1,2=           1          42
+  d+           3  (regular d M elastic) @evt#           1  @nt=          90  lb1,2=          42           3
+  d+           3  (regular d M elastic) @evt#           1  @nt=          95  lb1,2=           3          42
+  d+           0  (regular d M elastic) @evt#           1  @nt=         150  lb1,2=          42           0
+           2  *           8  ->d+           3  (regular d prodn)    @evt#           1  @nt=         235
+  d+           3  (regular d M elastic) @evt#           1  @nt=         249  lb1,2=          42           3
+           6  *           2  ->d+           4  (regular d prodn)    @evt#           1  @nt=         360

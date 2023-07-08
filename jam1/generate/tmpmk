@@ -1,0 +1,5 @@
+#!/bin/tcsh
+mkdir Jam1_3GeV_b0-14_RQMDRMF_$1\fm
+cd Jam1_3GeV_b0-14_RQMDRMF_$1\fm
+cp -d -r ../template_time/* .
+cd ..

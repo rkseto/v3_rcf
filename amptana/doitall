@@ -1,0 +1,12 @@
+#!/bin/bash
+./doit 3 1 -1
+./doit 3 2 -1
+./doit 5 1 -1
+./doit 5 2 -1
+./doit 8 1 -1
+./doit 8 2 -1
+./doit 19 1 -1
+./doit 19 2 -1
+./doit 200 1 -1
+./doit 200 2 -1
+

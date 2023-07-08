@@ -1,0 +1,47 @@
+Version: 1.8 # minimal SMASH version to use with this config file
+
+Logging:
+    default: INFO
+
+General:
+    Modus:          Collider
+    Time_Step_Mode: Fixed
+    Delta_Time:     0.1
+    End_Time:       200.0
+    Randomseed:     -1
+    Nevents:        100
+
+Output:
+    Output_Interval: 10.0
+    Density_Type: "baryon"
+    Particles:
+        Format:          ["Root"]
+        Extended: True
+Modi:
+    Collider:
+        Projectile:
+            Particles: {2212: 79, 2112: 118} #Gold197
+        Target:
+            Particles: {2212: 79, 2112: 118} #Gold197
+        Impact:
+            Sample: "quadratic"
+            Range: [0.0, 14.0]
+        Sqrtsnn: 19.0
+        Fermi_Motion: "on"
+        Collisions_Within_Nucleus: False
+#        Fermi_Motion: "frozen"
+#        E_Kin: 1.23
+
+Potentials:
+    Skyrme:
+        Skyrme_A: -124.0
+        Skyrme_B: 71.0
+        Skyrme_Tau: 2.0
+    Symmetry:
+        S_Pot: 18.0
+
+Collision_Term:
+    Pauli_Blocking:
+        Spatial_Averaging_Radius: 1.86
+        Momentum_Averaging_Radius: 0.08
+        Gaussian_Cutoff: 2.2

@@ -1,0 +1,222 @@
+#!/bin/bash
+if [[ $1 -eq 1 ]] && [[ -z "$3" ]]
+then
+    echo " doing 1: 0-14 casdade"
+    ./doit2b 0 0 14 cascade 0 14 
+    ./doit2b 1 0 14 cascade 0 14 
+    ./doit2b 2 0 14 cascade 0 14 
+    ./doit2b 3 0 14 cascade 0 14 
+    ./doit2b 4 0 14 cascade 0 14 
+    ./doit2b 5 0 14 cascade 0 14 
+    ./doit2b 6 0 14 cascade 0 14 
+    ./doit2b 7 0 14 cascade 0 14 
+    ./doit2b 8 0 14 cascade 0 14 
+    ./doit2b 9 0 14 cascade 0 14 
+    rm -f jam1_3_b0-14_cascade_all.root
+    hadd jam1_3_b0-14_cascade_all.root jam1_3_100K_b0-14_cascade_*.root
+    rm -f jam1_3_100K_b0-14_cascade_?.root
+    exit
+fi
+
+if [[ $1 -eq 1 ]]
+then
+    echo " doing 1: 0-14 cascade b= $2 = $3"
+    ./doit2b 0 0 14 cascade $2 $3 
+    ./doit2b 1 0 14 cascade $2 $3 
+    ./doit2b 2 0 14 cascade $2 $3 
+    ./doit2b 3 0 14 cascade $2 $3 
+    ./doit2b 4 0 14 cascade $2 $3 
+    ./doit2b 5 0 14 cascade $2 $3 
+    ./doit2b 6 0 14 cascade $2 $3 
+    ./doit2b 7 0 14 cascade $2 $3 
+    ./doit2b 8 0 14 cascade $2 $3 
+    ./doit2b 9 0 14 cascade $2 $3 
+    rm -f jam1_3_b$2\-$3\_cascade_all.root
+    hadd jam1_3_b$2\-$3\_cascade_all.root jam1_3_100K_b$2\-$3\_cascade_*.root
+    rm -f jam1_3_100K_b$2\-$3\_cascade_?.root
+    exit
+fi
+
+
+#if [[ -z "$6" ]]; then
+#    echo "need 6 arguments: file-number bmin(file) bmax(file) pot bmin bmiax (e.g. 0 5 9 hard2 5 9)"
+#    exit
+#fi
+
+if [[ $1 -eq 2 ]] && [[ -z "$3" ]]
+then
+    echo " doing 2: 0-14 RQMDS"
+    ./doit2b 0 0 14 RQMDS 0 14 
+    ./doit2b 1 0 14 RQMDS 0 14 
+    ./doit2b 2 0 14 RQMDS 0 14 
+    ./doit2b 3 0 14 RQMDS 0 14 
+    ./doit2b 4 0 14 RQMDS 0 14 
+    ./doit2b 5 0 14 RQMDS 0 14 
+    ./doit2b 6 0 14 RQMDS 0 14 
+    ./doit2b 7 0 14 RQMDS 0 14 
+    ./doit2b 8 0 14 RQMDS 0 14 
+    ./doit2b 9 0 14 RQMDS 0 14
+    rm -f jam1_3_b0-14_RQMDS_all.root
+    hadd jam1_3_b0-14_RQMDS_all.root jam1_3_100K_b0-14_RQMDS_*.root 
+    rm -f jam1_3_100K_b0-14_RQMDS_?.root
+    exit
+fi
+
+if [[ $1 -eq 2 ]]
+then
+    echo " doing 2: 0-14 RQMDS b= $2 - $3"
+    ./doit2b 0 0 14 RQMDS $2 $3 
+    ./doit2b 1 0 14 RQMDS $2 $3 
+    ./doit2b 2 0 14 RQMDS $2 $3 
+    ./doit2b 3 0 14 RQMDS $2 $3 
+    ./doit2b 4 0 14 RQMDS $2 $3 
+    ./doit2b 5 0 14 RQMDS $2 $3 
+    ./doit2b 6 0 14 RQMDS $2 $3 
+    ./doit2b 7 0 14 RQMDS $2 $3 
+    ./doit2b 8 0 14 RQMDS $2 $3 
+    ./doit2b 9 0 14 RQMDS $2 $3 
+    rm -f jam1_3_b$2\-$3\_RQMDS_all.root
+    hadd jam1_3_b$2\-$3\_RQMDS_all.root jam1_3_100K_b$2\-$3\_RQMDS_*.root 
+    rm -f jam1_3_100K_b$2\-$3\_RQMDS_?.root
+    exit
+fi
+
+
+
+if [[ $1 -eq 3 ]] && [[ -z "$3" ]]
+then
+    echo " doing 3: 9-14 RQMDS"
+    ./doit2b 0 9 14 RQMDS 9 14 
+    ./doit2b 1 9 14 RQMDS 9 14 
+    ./doit2b 2 9 14 RQMDS 9 14 
+    ./doit2b 3 9 14 RQMDS 9 14 
+    ./doit2b 4 9 14 RQMDS 9 14 
+    ./doit2b 5 9 14 RQMDS 9 14 
+    ./doit2b 6 9 14 RQMDS 9 14 
+    ./doit2b 7 9 14 RQMDS 9 14 
+    ./doit2b 8 9 14 RQMDS 9 14 
+    ./doit2b 9 9 14 RQMDS 9 14
+    rm -f jam1_3_b9-14_RQMDS_all.root
+    hadd jam1_3_b9-14_RQMDS_all.root jam1_3_100K_b9-14_RQMDS_*.root 
+    rm -f jam1_3_100K_b9-14_RQMDS_?.root
+    exit
+fi
+
+if [[ $1 -eq 4 ]] && [[ -z "$3" ]]
+then
+    echo " doing 4: 9-14 RQMDS"
+    ./doit2b 0 9 14 RQMDS 9 14 
+    ./doit2b 1 9 14 RQMDS 9 14 
+    ./doit2b 2 9 14 RQMDS 9 14 
+    ./doit2b 3 9 14 RQMDS 9 14 
+    ./doit2b 4 9 14 RQMDS 9 14 
+    ./doit2b 5 9 14 RQMDS 9 14 
+    ./doit2b 6 9 14 RQMDS 9 14 
+    ./doit2b 7 9 14 RQMDS 9 14 
+    ./doit2b 8 9 14 RQMDS 9 14 
+    ./doit2b 9 9 14 RQMDS 9 14
+    ./doit2b 10 9 14 RQMDS 9 14 
+    ./doit2b 11 9 14 RQMDS 9 14 
+    ./doit2b 12 9 14 RQMDS 9 14 
+    ./doit2b 13 9 14 RQMDS 9 14 
+    ./doit2b 14 9 14 RQMDS 9 14 
+    ./doit2b 15 9 14 RQMDS 9 14 
+    ./doit2b 16 9 14 RQMDS 9 14 
+    ./doit2b 17 9 14 RQMDS 9 14 
+    ./doit2b 18 9 14 RQMDS 9 14 
+    ./doit2b 19 9 14 RQMDS 9 14
+    ./doit2b 20 9 14 RQMDS 9 14 
+    ./doit2b 21 9 14 RQMDS 9 14 
+    ./doit2b 22 9 14 RQMDS 9 14 
+    ./doit2b 23 9 14 RQMDS 9 14 
+    ./doit2b 24 9 14 RQMDS 9 14 
+    ./doit2b 25 9 14 RQMDS 9 14 
+    ./doit2b 26 9 14 RQMDS 9 14 
+    ./doit2b 27 9 14 RQMDS 9 14 
+    ./doit2b 28 9 14 RQMDS 9 14 
+    ./doit2b 29 9 14 RQMDS 9 14
+    ./doit2b 30 9 14 RQMDS 9 14 
+    ./doit2b 31 9 14 RQMDS 9 14 
+    ./doit2b 32 9 14 RQMDS 9 14 
+    ./doit2b 33 9 14 RQMDS 9 14 
+    ./doit2b 34 9 14 RQMDS 9 14 
+    ./doit2b 35 9 14 RQMDS 9 14 
+    ./doit2b 36 9 14 RQMDS 9 14 
+    ./doit2b 37 9 14 RQMDS 9 14 
+    ./doit2b 38 9 14 RQMDS 9 14 
+    ./doit2b 39 9 14 RQMDS 9 14
+    ./doit2b 40 9 14 RQMDS 9 14 
+    ./doit2b 41 9 14 RQMDS 9 14 
+    ./doit2b 42 9 14 RQMDS 9 14 
+    ./doit2b 43 9 14 RQMDS 9 14 
+    ./doit2b 44 9 14 RQMDS 9 14 
+    ./doit2b 45 9 14 RQMDS 9 14 
+    ./doit2b 46 9 14 RQMDS 9 14 
+    ./doit2b 47 9 14 RQMDS 9 14 
+    ./doit2b 48 9 14 RQMDS 9 14 
+    ./doit2b 49 9 14 RQMDS 9 14
+    ./doit2b 50 9 14 RQMDS 9 14 
+    ./doit2b 51 9 14 RQMDS 9 14 
+    ./doit2b 52 9 14 RQMDS 9 14 
+    ./doit2b 53 9 14 RQMDS 9 14 
+    ./doit2b 54 9 14 RQMDS 9 14 
+    ./doit2b 55 9 14 RQMDS 9 14 
+    ./doit2b 56 9 14 RQMDS 9 14 
+    ./doit2b 57 9 14 RQMDS 9 14 
+    ./doit2b 58 9 14 RQMDS 9 14 
+    ./doit2b 59 9 14 RQMDS 9 14
+    ./doit2b 60 9 14 RQMDS 9 14 
+    ./doit2b 61 9 14 RQMDS 9 14 
+    ./doit2b 62 9 14 RQMDS 9 14 
+    ./doit2b 63 9 14 RQMDS 9 14 
+    ./doit2b 64 9 14 RQMDS 9 14 
+    ./doit2b 65 9 14 RQMDS 9 14 
+    ./doit2b 66 9 14 RQMDS 9 14 
+    ./doit2b 67 9 14 RQMDS 9 14 
+    ./doit2b 68 9 14 RQMDS 9 14 
+    ./doit2b 69 9 14 RQMDS 9 14
+    ./doit2b 70 9 14 RQMDS 9 14 
+    ./doit2b 71 9 14 RQMDS 9 14 
+    ./doit2b 72 9 14 RQMDS 9 14 
+    ./doit2b 73 9 14 RQMDS 9 14 
+    ./doit2b 74 9 14 RQMDS 9 14 
+    ./doit2b 75 9 14 RQMDS 9 14 
+    ./doit2b 76 9 14 RQMDS 9 14 
+    ./doit2b 77 9 14 RQMDS 9 14 
+    ./doit2b 78 9 14 RQMDS 9 14 
+    ./doit2b 79 9 14 RQMDS 9 14
+    ./doit2b 80 9 14 RQMDS 9 14 
+    ./doit2b 81 9 14 RQMDS 9 14 
+    ./doit2b 82 9 14 RQMDS 9 14 
+    ./doit2b 83 9 14 RQMDS 9 14 
+    ./doit2b 84 9 14 RQMDS 9 14 
+    ./doit2b 85 9 14 RQMDS 9 14 
+    ./doit2b 86 9 14 RQMDS 9 14 
+    ./doit2b 87 9 14 RQMDS 9 14 
+    ./doit2b 88 9 14 RQMDS 9 14 
+    ./doit2b 89 9 14 RQMDS 9 14
+    ./doit2b 90 9 14 RQMDS 9 14 
+    ./doit2b 91 9 14 RQMDS 9 14 
+    ./doit2b 92 9 14 RQMDS 9 14 
+    ./doit2b 93 9 14 RQMDS 9 14 
+    ./doit2b 94 9 14 RQMDS 9 14 
+    ./doit2b 95 9 14 RQMDS 9 14 
+    ./doit2b 96 9 14 RQMDS 9 14 
+    ./doit2b 97 9 14 RQMDS 9 14 
+    ./doit2b 98 9 14 RQMDS 9 14 
+    ./doit2b 99 9 14 RQMDS 9 14
+    rm -f jam1_3_b9-14_RQMDS_all.root
+    hadd jam1_3_b9-14_RQMDS_all.root jam1_3_100K_b9-14_RQMDS_*.root 
+    rm -f jam1_3_100K_b9-14_RQMDS_?.root
+    rm -f jam1_3_100K_b9-14_RQMDS_??.root
+    rm -f jam1_3_100K_b9-14_RQMDS_100.root
+    exit
+fi
+
+
+echo "end"
+exit
+
+
+
+

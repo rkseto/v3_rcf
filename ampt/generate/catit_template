@@ -1,0 +1,33 @@
+#!/bin/bash
+ cat ./job?/ana/ampt.dat > ampt0.dat
+ cat ./job1?/ana/ampt.dat > ampt1.dat
+ cat ./job2?/ana/ampt.dat > ampt2.dat
+ cat ./job3?/ana/ampt.dat > ampt3.dat
+ cat ./job4?/ana/ampt.dat > ampt4.dat
+ cat ./job5?/ana/ampt.dat > ampt5.dat
+ cat ./job6?/ana/ampt.dat > ampt6.dat
+ cat ./job7?/ana/ampt.dat > ampt7.dat
+ cat ./job8?/ana/ampt.dat > ampt8.dat
+ cat ./job9?/ana/ampt.dat > ampt9.dat
+
+ cat ./job&0?/ana/ampt.dat > ampt&0.dat
+ cat ./job&1?/ana/ampt.dat > ampt&1.dat
+ cat ./job&2?/ana/ampt.dat > ampt&2.dat
+ cat ./job&3?/ana/ampt.dat > ampt&3.dat
+ cat ./job&4?/ana/ampt.dat > ampt&4.dat
+ cat ./job&5?/ana/ampt.dat > ampt&5.dat
+ cat ./job&6?/ana/ampt.dat > ampt&6.dat
+ cat ./job&7?/ana/ampt.dat > ampt&7.dat
+ cat ./job&8?/ana/ampt.dat > ampt&8.dat
+ cat ./job&9?/ana/ampt.dat > ampt&9.dat
+
+ cat ./job&0?/ana/ampt.dat > ampt&0.dat
+ cat ./job&1?/ana/ampt.dat > ampt&1.dat
+ cat ./job&2?/ana/ampt.dat > ampt&2.dat
+ cat ./job&3?/ana/ampt.dat > ampt&3.dat
+ cat ./job&4?/ana/ampt.dat > ampt&4.dat
+ cat ./job&5?/ana/ampt.dat > ampt&5.dat
+ cat ./job&6?/ana/ampt.dat > ampt&6.dat
+ cat ./job&7?/ana/ampt.dat > ampt&7.dat
+ cat ./job&8?/ana/ampt.dat > ampt&8.dat
+ cat ./job&9?/ana/ampt.dat > ampt&9.dat

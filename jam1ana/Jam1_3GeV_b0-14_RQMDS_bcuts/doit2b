@@ -1,0 +1,16 @@
+#!/bin/bash
+if [[ -z "$6" ]]; then
+    echo "need 6 arguments: file-number bmin(file) bmax(file) pot bmin bmiax (e.g. 0 5 9 hard2 5 9)"
+    exit
+fi
+echo "input to doit1b is  file#=" $1 " centmin(file)=" $2 " centmax(file)=" $3 " potname=" $4  " centmin=" $5  " centmax=" $6 
+ln -sf /star/u/rseto/work/v3/jam1/generate/Jam1_3GeV_b9-14_RQMDS/run/Data/Jam1_3GeV_b$2-$3_$4_all_$1.root jam1data.root
+ls -l jam1data.root
+root -q -b jam1ana5.C+\(5,-1,0,0,3,$5,$6\)
+mv -f jam1ana5.root jam1_3_100K_b$5-$6_$4_$1.root
+exit
+
+$1 = 0
+$2 = 0
+$3 = 14
+$4 = hard2

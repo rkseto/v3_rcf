@@ -1,0 +1,14 @@
+Universe       = vanilla
+Notification   = Error
+GetEnv         = True
+Initialdir     = $ENV(PWD)
+Executable     = /bin/csh
+Arguments      = $ENV(PWD)/condor_smash.csh $(process)
+Log            = $ENV(PWD)/logs/myprog$(process).log
+Output         = $ENV(PWD)/logs/myprog$(process).out
+Error          = $ENV(PWD)/logs/myprog$(process).log
+Notify_user    = $ENV(USER)@rcf.rhic.bnl.gov
++Experiment    = "star"
++Job_Type      = "cas"
+Queue 5000
+

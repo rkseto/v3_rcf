@@ -1,0 +1,10 @@
+#!/bin/tcsh
+
+if ( "$1" == "" ) then      # parentheses not strictly needed in this simple case
+    echo "variable 1 is empty = set it to the energy"
+    exit
+else 
+    echo "variable contains $1"
+endif
+
+ cat ./job*/urqmddone.f14 > urqmd_$1\GeV_all_0.f14

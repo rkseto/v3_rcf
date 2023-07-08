@@ -1,0 +1,120 @@
+#!/bin/tcsh
+
+if ( "$1" == "" ) then      # parentheses not strictly needed in this simple case
+    echo "variable 1 is empty = set it to the string-label"
+    exit
+else 
+    echo "variable contains $1"
+endif
+
+hadd smash2_$1_all_0.root job?/data/0/smashdone.root job??/data/0/smashdone.root
+hadd smash2_$1_all_1.root job1??/data/0/smashdone.root
+hadd smash2_$1_all_2.root job2??/data/0/smashdone.root
+hadd smash2_$1_all_3.root job3??/data/0/smashdone.root
+hadd smash2_$1_all_4.root job4??/data/0/smashdone.root
+hadd smash2_$1_all_5.root job5??/data/0/smashdone.root
+hadd smash2_$1_all_6.root job6??/data/0/smashdone.root
+hadd smash2_$1_all_7.root job7??/data/0/smashdone.root
+hadd smash2_$1_all_8.root job8??/data/0/smashdone.root
+hadd smash2_$1_all_9.root job9??/data/0/smashdone.root
+
+hadd smash2_$1_all_10.root job10??/data/0/smashdone.root 
+hadd smash2_$1_all_11.root job11??/data/0/smashdone.root
+hadd smash2_$1_all_12.root job12??/data/0/smashdone.root
+hadd smash2_$1_all_13.root job13??/data/0/smashdone.root
+hadd smash2_$1_all_14.root job14??/data/0/smashdone.root
+hadd smash2_$1_all_15.root job15??/data/0/smashdone.root
+hadd smash2_$1_all_16.root job16??/data/0/smashdone.root
+hadd smash2_$1_all_17.root job17??/data/0/smashdone.root
+hadd smash2_$1_all_18.root job18??/data/0/smashdone.root
+hadd smash2_$1_all_19.root job19??/data/0/smashdone.root
+
+hadd smash2_$1_all_20.root job20??/data/0/smashdone.root
+hadd smash2_$1_all_21.root job21??/data/0/smashdone.root
+hadd smash2_$1_all_22.root job22??/data/0/smashdone.root
+hadd smash2_$1_all_23.root job23??/data/0/smashdone.root
+hadd smash2_$1_all_24.root job24??/data/0/smashdone.root
+hadd smash2_$1_all_25.root job25??/data/0/smashdone.root
+hadd smash2_$1_all_26.root job26??/data/0/smashdone.root
+hadd smash2_$1_all_27.root job27??/data/0/smashdone.root
+hadd smash2_$1_all_28.root job28??/data/0/smashdone.root
+hadd smash2_$1_all_29.root job29??/data/0/smashdone.root
+
+hadd smash2_$1_all_30.root job30??/data/0/smashdone.root
+hadd smash2_$1_all_31.root job31??/data/0/smashdone.root
+hadd smash2_$1_all_32.root job32??/data/0/smashdone.root
+hadd smash2_$1_all_33.root job33??/data/0/smashdone.root
+hadd smash2_$1_all_34.root job34??/data/0/smashdone.root
+hadd smash2_$1_all_35.root job35??/data/0/smashdone.root
+hadd smash2_$1_all_36.root job36??/data/0/smashdone.root
+hadd smash2_$1_all_37.root job37??/data/0/smashdone.root
+hadd smash2_$1_all_38.root job38??/data/0/smashdone.root
+hadd smash2_$1_all_39.root job39??/data/0/smashdone.root
+
+hadd smash2_$1_all_40.root job40??/data/0/smashdone.root
+hadd smash2_$1_all_41.root job41??/data/0/smashdone.root
+hadd smash2_$1_all_42.root job42??/data/0/smashdone.root
+hadd smash2_$1_all_43.root job43??/data/0/smashdone.root
+hadd smash2_$1_all_44.root job44??/data/0/smashdone.root
+hadd smash2_$1_all_45.root job45??/data/0/smashdone.root
+hadd smash2_$1_all_46.root job46??/data/0/smashdone.root
+hadd smash2_$1_all_47.root job47??/data/0/smashdone.root
+hadd smash2_$1_all_48.root job48??/data/0/smashdone.root
+hadd smash2_$1_all_49.root job49??/data/0/smashdone.root
+
+hadd smash2_$1_all_50.root job50??/data/0/smashdone.root
+hadd smash2_$1_all_51.root job51??/data/0/smashdone.root
+hadd smash2_$1_all_52.root job52??/data/0/smashdone.root
+hadd smash2_$1_all_53.root job53??/data/0/smashdone.root
+hadd smash2_$1_all_54.root job54??/data/0/smashdone.root
+hadd smash2_$1_all_55.root job55??/data/0/smashdone.root
+hadd smash2_$1_all_56.root job56??/data/0/smashdone.root
+hadd smash2_$1_all_57.root job57??/data/0/smashdone.root
+hadd smash2_$1_all_58.root job58??/data/0/smashdone.root
+hadd smash2_$1_all_59.root job59??/data/0/smashdone.root
+
+hadd smash2_$1_all_60.root job60??/data/0/smashdone.root
+hadd smash2_$1_all_61.root job61??/data/0/smashdone.root
+hadd smash2_$1_all_62.root job62??/data/0/smashdone.root
+hadd smash2_$1_all_63.root job63??/data/0/smashdone.root
+hadd smash2_$1_all_64.root job64??/data/0/smashdone.root
+hadd smash2_$1_all_65.root job65??/data/0/smashdone.root
+hadd smash2_$1_all_66.root job66??/data/0/smashdone.root
+hadd smash2_$1_all_67.root job67??/data/0/smashdone.root
+hadd smash2_$1_all_68.root job68??/data/0/smashdone.root
+hadd smash2_$1_all_69.root job69??/data/0/smashdone.root
+
+hadd smash2_$1_all_70.root job70??/data/0/smashdone.root
+hadd smash2_$1_all_71.root job71??/data/0/smashdone.root
+hadd smash2_$1_all_72.root job72??/data/0/smashdone.root
+hadd smash2_$1_all_73.root job73??/data/0/smashdone.root
+hadd smash2_$1_all_74.root job74??/data/0/smashdone.root
+hadd smash2_$1_all_75.root job75??/data/0/smashdone.root
+hadd smash2_$1_all_76.root job76??/data/0/smashdone.root
+hadd smash2_$1_all_77.root job77??/data/0/smashdone.root
+hadd smash2_$1_all_78.root job78??/data/0/smashdone.root
+hadd smash2_$1_all_79.root job79??/data/0/smashdone.root
+
+hadd smash2_$1_all_80.root job80??/data/0/smashdone.root
+hadd smash2_$1_all_81.root job81??/data/0/smashdone.root
+hadd smash2_$1_all_82.root job82??/data/0/smashdone.root
+hadd smash2_$1_all_83.root job83??/data/0/smashdone.root
+hadd smash2_$1_all_84.root job84??/data/0/smashdone.root
+hadd smash2_$1_all_85.root job85??/data/0/smashdone.root
+hadd smash2_$1_all_86.root job86??/data/0/smashdone.root
+hadd smash2_$1_all_87.root job87??/data/0/smashdone.root
+hadd smash2_$1_all_88.root job88??/data/0/smashdone.root
+hadd smash2_$1_all_89.root job89??/data/0/smashdone.root
+
+hadd smash2_$1_all_90.root job90??/data/0/smashdone.root
+hadd smash2_$1_all_91.root job91??/data/0/smashdone.root
+hadd smash2_$1_all_92.root job92??/data/0/smashdone.root
+hadd smash2_$1_all_93.root job93??/data/0/smashdone.root
+hadd smash2_$1_all_94.root job94??/data/0/smashdone.root
+hadd smash2_$1_all_95.root job95??/data/0/smashdone.root
+hadd smash2_$1_all_96.root job96??/data/0/smashdone.root
+hadd smash2_$1_all_97.root job97??/data/0/smashdone.root
+hadd smash2_$1_all_98.root job98??/data/0/smashdone.root
+hadd smash2_$1_all_99.root job99??/data/0/smashdone.root
+
+

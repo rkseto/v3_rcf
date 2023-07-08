@@ -1,0 +1,8 @@
+flow calculation !
+final cal versoin: (0.00975493,0i)
+ibin 0 1.00783e+09
+calculate bin 0
+CumA1_1: -0.0412057 CumB1_1: -0.0379981 v2: -nan
+ibin 0
+fCumA1_1: 0.00975493 fCumB1_1: -0.00112115 f_v2: -0.0113515
+

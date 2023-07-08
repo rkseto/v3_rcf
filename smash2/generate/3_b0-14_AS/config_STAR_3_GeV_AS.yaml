@@ -1,0 +1,53 @@
+Version: 1.8 # minimal SMASH version to use with this config file
+
+Logging:
+    default: INFO
+
+General:
+    Modus:         Collider
+    Time_Step_Mode: Fixed 
+    Delta_Time:    0.1
+    End_Time:      70.0
+    Randomseed:    -1
+    Nevents:       1
+    Ensembles: 50
+    Testparticles: 20
+    Smearing_Mode:  Covariant Gaussian
+    Derivatives_Mode: Finite difference
+    Gauss_Cutoff_In_Sigma: 2.0 
+
+Collision_Term:
+    #Multi_Particle_Reactions: ["Deuteron_3to2","A3_Nuclei_4to2"]
+    Included_2to2: ["Elastic","NN_to_NR", "NN_to_DR", "KN_to_KN", "Strangeness_exchange", "NNbar", "PiDeuteron_to_NN", "PiDeuteron_to_pidprime", "NDeuteron_to_Ndprime"] 
+    #Collision_Criterion: Stochastic
+    #Only_Warn_For_High_Probability: True
+    Pauli_Blocking:
+        Spatial_Averaging_Radius:   1.86
+        Momentum_Averaging_Radius:  0.08
+        Gaussian_Cutoff:            2.2
+
+Output:
+    Output_Interval: 10.0
+    Particles:
+        Format:          ["Root"]
+        Only_Final:    Yes
+
+Modi:
+    Collider:
+        Projectile:
+            Particles: {2212: 79, 2112: 118} #Au197
+        Target:
+            Particles: {2212: 79, 2112: 118} #Au197
+        Impact:
+            Range: [0.0, 14.0]
+        Sqrtsnn: 3.0
+        Fermi_Motion: "on"
+
+Lattice:
+
+Potentials:
+    VDF:
+        Sat_rhoB: 0.168
+        Powers: [2.0, 2.35]
+        Coeffs: [-209.2, 156.5]
+

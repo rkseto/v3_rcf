@@ -1,0 +1,16 @@
+#!/bin/bash
+echo "arguments are energy(3,5,8,19,200,13) nomelt/melt(1,2) bmin bmax set_number"
+if [[ -z "$1" ]]; then
+    echo "need 5 arguments"
+    exit
+fi
+if [[ -z "$5" ]]; then
+    echo "need five arguments"
+    exit
+fi
+if(($2 == 1)); then
+    echo "$1 GeV nomelt b=$3-$4 set_number=$5"
+    echo " making directory e$1GeV/jobs_$1GeV_nomelt_b$3-$4_set$5"
+    mkdir -p e$1GeV/jobs_$1GeV_nomelt_b$3-$4_set$5
+fi
+

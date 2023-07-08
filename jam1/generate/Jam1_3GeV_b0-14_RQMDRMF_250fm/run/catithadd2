@@ -1,0 +1,23 @@
+#!/bin/tcsh
+
+if ( "$1" == "" ) then      # parentheses not strictly needed in this simple case
+    echo "variable 1 is empty = set it to the string-label"
+    exit
+else 
+    echo "variable contains $1"
+endif
+
+hadd $1_all_0.root convert_00??_run/event_200.root
+hadd $1_all_1.root convert_01??_run/event_200.root
+hadd $1_all_2.root convert_02??_run/event_200.root
+hadd $1_all_3.root convert_03??_run/event_200.root
+hadd $1_all_4.root convert_04??_run/event_200.root
+hadd $1_all_5.root convert_05??_run/event_200.root
+hadd $1_all_6.root convert_06??_run/event_200.root
+hadd $1_all_7.root convert_07??_run/event_200.root
+hadd $1_all_8.root convert_08??_run/event_200.root
+hadd $1_all_9.root convert_09??_run/event_200.root convert_1000_run/event_200.root
+
+
+
+

@@ -1,0 +1,44 @@
+Version: 1.8 # minimal SMASH version to use with this config file
+
+Logging:
+    default: INFO
+
+General:
+    Modus:          Collider
+    Time_Step_Mode: Fixed
+    Delta_Time:     0.1
+    End_Time:       200.0
+    Randomseed:     -1
+    Nevents:        100
+
+Output:
+    Output_Interval: 10.0
+    Particles:
+        Format:          ["Oscar2013"]
+        Extended: True
+Modi:
+    Collider:
+        Projectile:
+            Particles: {2212: 79, 2112: 118} #Gold197
+        Target:
+            Particles: {2212: 79, 2112: 118} #Gold197
+        Impact:
+            Sample: "quadratic"
+            Range: [5.0, 9.0]
+        Sqrtsnn: 3.0
+        Fermi_Motion: "on"
+        Collisions_Within_Nucleus: False
+#        Fermi_Motion: "frozen"
+#        E_Kin: 1.23
+
+Potentials:
+    VDF:
+        Sat_rhoB: 0.168
+        Powers: [2.0, 2.676]
+        Coeffs: [-142.0, 125.93]
+
+Collision_Term:
+    Pauli_Blocking:
+        Spatial_Averaging_Radius: 1.86
+        Momentum_Averaging_Radius: 0.08
+        Gaussian_Cutoff: 2.2

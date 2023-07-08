@@ -1,0 +1,4 @@
+//submit jobs
+star-submit test.xml
+//for test
+star-submit -r 0 [RequestID].session.xml

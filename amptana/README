@@ -1,0 +1,52 @@
+Instructions for running AMPT for v3 studies Jan 25, 2022
+
+Areas: 
+on RCF
+workarea :  /star/data01/pwg/rseto
+Generation
+area: v3/ampt/generate       Ampt code is here
+then areas 3 3melt etc
+submit jobs
+//1) single jobs typically for a centrality cut  (10K events)  in area /3/condor_ampt.job << done on unbutu on my machine
+2) multiple jobs to generate many events (e.g. 1M)  
+a) condor_ampt.job (e.g. 350 jobs) and condor_ampt.csh   will need template area
+uses areas  /3/jobs      (and .logs)
+input_3AuAu.ampt   controls jobs
+b) in jobs, run catit to cat all the .dat files into e.g. 35 files for doing analysis
+this is for 1M events
+for smaller files - e.g. 10K - just cat all the .dat files and put them in the ana area.
+
+
+/3/ and /3melt/ 1M events minbias-multiple jobs-multiple outfile files on RCF and 10K(bcut)-generated on unbutu - single output
+/5/ /5melt/ 10K(bcut)-generated on unbutu - single output
+/8/ /8melt/  10K bcut generated in multiple jobs on RCF - single output
+/19/  /19melt/  10K bcut generated in multiple jobs on RCF - single output
+/200/  /200melt/  10K bcut generated in multiple jobs on RCF - single output
+There is a watchit 
+
+analyzing jobs
+area: amptana
+program amptana3.C
+for running jobs interactively:  macros - doit3, doitall3   note: 200 GeV files get error after 9K events
+for running multiple jobs in batch: (3.g. 3 min bias with 1M events)
+area: ./run3/ and ./run3melt/
+runamptana.job  and .csh
+    --> to make b cut, change bmin and bmax in runamptana.csh
+   right now only 3 GeV and 3melt is set up.
+use hadit.csh to had jobs.
+ there is a watchit to watch jobs
+
+Studying .root files and making plots
+   move to unbutu
+
+on RCF move .root files to ~/tran/amptroot
+
+on unbutu
+  start fzfiles 
+move files to /work/amptana/rcfroot
+root amptanaplot1.C
+
+output is png files
+
+
+

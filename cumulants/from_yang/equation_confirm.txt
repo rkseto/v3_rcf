@@ -1,0 +1,274 @@
+v1_3 [ ibin ][ itrack ][ icent ] = Q3differential3 / ( reference4_4 );
+Q3differential3 = Q3differential3_complex . Re ()
+//exp(3psy-phi1-phi2-phi3)
+TComplex Q3differential3_complex = correction37_complex
+                - correction15_complex * correction33_complex
+                - 3.0 * correction18_complex * correction29_complex
+                + 6.0 * ( correction15_complex * correction18_complex * correction21_complex
+                + correction18_complex * correction18_complex * correction25_complex )
+                - 3.0 * correction25_complex * correction21_complex
+                - 6.0 * correction15_complex * correction18_complex * correction18_complex * correction18_complex
+                ;
+
+TComplex correction37_complex   = TComplex (correction37,correction38 );
+
+Double_t correction37      = sumAddon37 [ ibin ][ itrack ][ icent ] / sumNewAddonWeight0111 [ ibin ][ itrack ][ icent ];
+
+if ( newAddonWeight0111 != 0.0 ) sumAddon37 [ ibin ][ tracknumber ][ centrality ] += addon37 ;
+
+//3n*phi1-phi2-phi3-phi4 (guess)
+Double_t addon37 = ( pp_3n_0 * TComplex::Conjugate ( QQ_n_1 ) * TComplex::Conjugate ( QQ_n_1 ) * TComplex::Conjugate ( QQ_n_1 )
+                      - 3.0 * pp_2n_0 * TComplex::Conjugate ( QQ_n_1 ) * TComplex::Conjugate ( QQ_n_1 )
+                      - 3.0 * pp_3n_0 * TComplex::Conjugate ( QQ_n_1 ) * TComplex::Conjugate ( QQ_2n_2 )
+                      + 3.0 * pp_2n_0 * TComplex::Conjugate ( QQ_2n_2 )
+                      + 6.0 * pp_n_0 * TComplex::Conjugate ( QQ_n_1 )
+                      + 2.0 * pp_3n_0 * TComplex::Conjugate ( QQ_3n_1 )
+                      - 6.0 * mpp [ ibin ] ) . Re ();
+
+TComplex pp_3n_0 = TComplex ( pp_3n_0_r [ ibin ] , pp_3n_0_i [ ibin ] );
+
+n=1
+
+pp_3n_0_r[bin] += TMath::Cos(3.0 * n * phi); 
+pp_3n_0_i[bin] += TMath::Sin(3.0 * n * phi); //for particle of interest
+
+testCoeff=1
+
+TComplex  QQ_n_1 = TComplex (  QQ_n_1_r ,  QQ_n_1_i ) * testCoeff;
+QQ_n_1_r += TMath::Cos(n * phi);
+QQ_n_1_i += TMath::Sin(n * phi); //for mrapidity > 0
+
+TComplex pp_2n_0 = TComplex ( pp_2n_0_r [ ibin ] , pp_2n_0_i [ ibin ] );
+pp_2n_0_r[bin] += TMath::Cos(2.0 * n * phi);
+pp_2n_0_i[bin] += TMath::Sin(2.0 * n * phi);
+
+TComplex pp_3n_0 = TComplex ( pp_3n_0_r [ ibin ] , pp_3n_0_i [ ibin ] );
+pp_3n_0_r[bin] += TMath::Cos(3.0 * n * phi); 
+pp_3n_0_i[bin] += TMath::Sin(3.0 * n * phi);
+
+TComplex QQ_2n_2 = TComplex ( QQ_2n_2_r , QQ_2n_2_i ) * testCoeff;
+QQ_2n_2_r += TMath::Cos(2.0 * n * phi); 
+QQ_2n_2_i += TMath::Sin(2.0 * n * phi);
+
+TComplex  pp_n_0 = TComplex (  pp_n_0_r [ ibin ] ,  pp_n_0_i [ ibin ] );
+pp_n_0_r[bin] += TMath::Cos(n * phi);
+pp_n_0_i[bin] += TMath::Sin(n * phi);
+
+TComplex QQ_3n_1 = TComplex ( QQ_3n_1_r , QQ_3n_1_i ) * testCoeff;
+QQ_3n_1_r += TMath::Cos(3.0 * n * phi);
+QQ_3n_1_i += TMath::Sin(3.0 * n * phi);
+
+bin = hv1_4->FindBin(mRapidity) - 1;
+if(pid == 1 && charge > 0 && mRapidity > 0.0) mpp[bin] ++;
+
+if ( newAddonWeight0111 != 0.0 ) sumNewAddonWeight0111 [ ibin ][ tracknumber ][ centrality ] += newAddonWeight0111 ;
+Double_t newAddonWeight0111 = mpp [ ibin ] * tracknumber2 * ( tracknumber2 - 1.0 ) * ( tracknumber2 - 2.0 );
+Int_t tracknumber2 = N_RFP - 1;
+if(mRapidity > 0.0) N_RFP++;
+
+Double_t correction38 = sumAddon38 [ ibin ][ itrack ][ icent ] / sumNewAddonWeight0111 [ ibin ][ itrack ][ icent ];
+if ( newAddonWeight0111 != 0.0 ) sumAddon38 [ ibin ][ tracknumber ][ centrality ] += addon38 ;
+
+Double_t addon38 = ( pp_3n_0 * TComplex::Conjugate ( QQ_n_1 ) * TComplex::Conjugate ( QQ_n_1 ) * TComplex::Conjugate ( QQ_n_1 )
+                      - 3.0 * pp_2n_0 * TComplex::Conjugate ( QQ_n_1 ) * TComplex::Conjugate ( QQ_n_1 )
+                      - 3.0 * pp_3n_0 * TComplex::Conjugate ( QQ_n_1 ) * TComplex::Conjugate ( QQ_2n_2 )
+                      + 3.0 * pp_2n_0 * TComplex::Conjugate ( QQ_2n_2 )
+                      + 6.0 * pp_n_0 * TComplex::Conjugate ( QQ_n_1 )
+                      + 2.0 * pp_3n_0 * TComplex::Conjugate ( QQ_3n_1 )
+                      - 6.0 * mpp [ ibin ] ) . Im ();
+
+
+TComplex correction15_complex   = TComplex ( correction15   ,  correction16 );
+Double_t correction15      = sumAddon15 [ ibin ][ itrack ][ icent ] / sumNewAddonWeight0 [ ibin ][ itrack ][ icent ];
+if ( newAddonWeight0 != 0.0 ) sumAddon15 [ ibin ][ tracknumber ][ centrality ] += addon15 ;
+Double_t addon15 = pp_3n_0 . Re ();
+Double_t addon16 = pp_3n_0 . Im ();
+
+Double_t correction16      = sumAddon16 [ ibin ][ itrack ][ icent ] / sumNewAddonWeight0 [ ibin ][ itrack ][ icent ];
+if ( newAddonWeight0 != 0.0 ) sumAddon16 [ ibin ][ tracknumber ][ centrality ] += addon16 ;
+if ( newAddonWeight0 != 0.0 ) sumNewAddonWeight0 [ ibin ][ tracknumber ][ centrality ] += newAddonWeight0;
+Double_t newAddonWeight0 = mpp [ ibin ] ;
+if(pid == 1 && charge > 0 && mRapidity > 0.0) mpp[bin] ++;
+
+TComplex correction33_complex   = TComplex ( correction33   , -correction34 );
+Double_t correction33      = sumAddon33 [ itrack ][ icent ] / sumNewAddonWeight111 [ itrack ][ icent ];
+if ( newAddonWeight111 != 0.0 ) sumAddon33 [ tracknumber ][ centrality ] += addon33 ;
+
+Double_t addon33 = ( QQ_n_1 * QQ_n_1 * QQ_n_1 - 3.0 * QQ_2n_2 * QQ_n_1 + 2.0 * QQ_3n_1 ) . Re ();
+Double_t addon34 = ( QQ_n_1 * QQ_n_1 * QQ_n_1 - 3.0 * QQ_2n_2 * QQ_n_1 + 2.0 * QQ_3n_1 ) . Im ();
+
+if ( newAddonWeight111 != 0.0 ) sumNewAddonWeight111 [ tracknumber ][ centrality ] += newAddonWeight111 ;
+Double_t newAddonWeight111 =  ( tracknumber2 + 1.0 ) * tracknumber2 * ( tracknumber2 - 1.0 );
+
+TComplex correction18_complex   = TComplex ( correction17   , -correction18 );
+Double_t correction17      = sumAddon17 [ itrack ][ icent ] / sumNewAddonWeight1 [ itrack ][ icent ];
+if ( newAddonWeight1 != 0.0 ) sumAddon17 [ tracknumber ][ centrality ] += addon17 ;
+
+Double_t addon17 = QQ_n_1 . Re ();
+Double_t addon18 = QQ_n_1 . Im ();
+
+if ( newAddonWeight1 != 0.0 ) sumNewAddonWeight1 [ tracknumber ][ centrality ] += newAddonWeight1 ;
+Double_t newAddonWeight1 = ( tracknumber2 + 1.0 );
+
+Double_t correction18      = sumAddon18 [ itrack ][ icent ] / sumNewAddonWeight1 [ itrack ][ icent ];
+
+if ( newAddonWeight1 != 0.0 ) sumAddon18 [ tracknumber ][ centrality ] += addon18 ;
+
+TComplex correction29_complex   = TComplex ( correction29   ,  correction30 );
+Double_t correction29      = sumAddon29 [ ibin ][ itrack ][ icent ] / sumNewAddonWeight011 [ ibin ][ itrack ][ icent ];
+//3n*phi1-phi2-phi3
+if ( newAddonWeight011 != 0.0 ) sumAddon29 [ ibin ][ tracknumber ][ centrality ] += addon29 ;
+
+Double_t addon29 = ( pp_3n_0 * TComplex::Conjugate ( QQ_n_1 ) * TComplex::Conjugate ( QQ_n_1 ) - 2.0 * pp_2n_0 * TComplex::Conjugate ( QQ_n_1 ) - pp_3n_0 * TComplex::Conjugate ( QQ_2n_2 ) + 2.0 * pp_n_0 ) . Re ();
+Double_t addon30 = ( pp_3n_0 * TComplex::Conjugate ( QQ_n_1 ) * TComplex::Conjugate ( QQ_n_1 ) - 2.0 * pp_2n_0 * TComplex::Conjugate ( QQ_n_1 ) - pp_3n_0 * TComplex::Conjugate ( QQ_2n_2 ) + 2.0 * pp_n_0 ) . Im ();
+
+if ( newAddonWeight011 != 0.0 ) sumNewAddonWeight011 [ ibin ][ tracknumber ][ centrality ] += newAddonWeight011 ;
+Double_t newAddonWeight011 = mpp [ ibin ] * tracknumber2 * ( tracknumber2 - 1.0 );
+
+Double_t correction30      = sumAddon30 [ ibin ][ itrack ][ icent ] / sumNewAddonWeight011 [ ibin ][ itrack ][ icent ];
+if ( newAddonWeight011 != 0.0 ) sumAddon30 [ ibin ][ tracknumber ][ centrality ] += addon30 ;
+
+TComplex correction21_complex   = TComplex ( correction21   , -correction22 );
+
+Double_t correction21  = sumAddon21 [ itrack ][ icent ] / sumNewAddonWeight11 [ itrack ][ icent ];
+if ( newAddonWeight11 != 0.0 ) sumAddon21 [ tracknumber ][ centrality ] += addon21 ;
+
+//<cos(n(phi1+phi2))>
+Double_t addon21 = ( QQ_n_1 * QQ_n_1 - QQ_2n_2 ) . Re ();
+
+//<sin(n(phi1+phi2))>
+Double_t addon22 = ( QQ_n_1 * QQ_n_1 - QQ_2n_2 ) . Im ();
+
+Double_t correction22 = sumAddon22 [ itrack ][ icent ] / sumNewAddonWeight11 [ itrack ][ icent ];
+if ( newAddonWeight11 != 0.0 ) sumAddon22 [ tracknumber ][ centrality ] += addon22 ;
+
+if ( newAddonWeight11 != 0.0 ) sumNewAddonWeight11 [ tracknumber ][ centrality ] += newAddonWeight11 ;
+Double_t newAddonWeight11 = tracknumber2 * ( tracknumber2 + 1.0 );
+
+TComplex correction25_complex   = TComplex ( correction25   ,  correction26 );
+
+Double_t correction25      = sumAddon25 [ ibin ][ itrack ][ icent ] / sumNewAddonWeight01 [ ibin ][ itrack ][ icent ];
+if ( newAddonWeight01 != 0.0 ) sumAddon25 [ ibin ][ tracknumber ][ centrality ] += addon25 ;
+
+//3n*p
+uble_t addon25 = ( pp_3n_0 * TComplex::Conjugate ( QQ_n_1 ) - pp_2n_0 ) . Re ();
+      Double_t addon26 = ( pp_3n_0 * TComplex::Conjugate ( QQ_n_1 ) - pp_2n_0 ) . Im ();
+
+Double_t addon25 = ( pp_3n_0 * TComplex::Conjugate ( QQ_n_1 ) - pp_2n_0 ) . Re ();
+Double_t addon26 = ( pp_3n_0 * TComplex::Conjugate ( QQ_n_1 ) - pp_2n_0 ) . Im ();
+
+if ( newAddonWeight01 != 0.0 ) sumNewAddonWeight01 [ ibin ][ tracknumber ][ centrality ] += newAddonWeight01 ;
+
+Double_t newAddonWeight01 = mpp [ ibin ] * tracknumber2;
+
+Double_t correction26      = sumAddon26 [ ibin ][ itrack ][ icent ] / sumNewAddonWeight01 [ ibin ][ itrack ][ icent ];
+
+if ( newAddonWeight01 != 0.0 ) sumAddon26 [ ibin ][ tracknumber ][ centrality ] += addon26 ;
+
+reference4_4 = pow(reference4_3,3.0);
+
+Double_t reference4_3 = /*( reference4_2 != -999.0 && sign4 * reference4_2 > 0.0 ) ?*/ TMath::Power ( sign4 * reference4_2 , 0.25 ) /*: -999.0*/;
+      //if ( /*!TMath::Finite ( reference4_3 ) || reference4_3 == -999.0 ||*/ TMath::Abs ( reference4_3 ) < 1.0e-44 ) reference4_3 = -999.0;
+Double_t reference4_3 = TMath::Power ( sign4 * reference4_2 , 0.25 ) ;
+
+sign4 = -1.0;
+
+Double_t reference4_2 = reference4_1 - 2.0 * TMath::Power ( reference2_1 , 2.0 )
+              - 4.0 * correction1 * correction7
+              + 4.0 * correction2 * correction8
+              - TMath::Power ( correction5 , 2.0 ) - TMath::Power ( correction6 , 2.0 )
+              + 4.0 * correction5 * ( TMath::Power ( correction1 , 2.0 ) - TMath::Power ( correction2 , 2.0 ) )
+              + 8.0 * correction6 * correction2 * correction1
+              + 8.0 * reference2_1 * ( TMath::Power ( correction1 , 2.0 ) + TMath::Power ( correction2 , 2.0 ) )
+              - 6.0 * TMath::Power ( TMath::Power ( correction1 , 2.0 ) + TMath::Power ( correction2 , 2.0 ) , 2.0 ) /*: -999.0*/;
+
+Double_t reference4_1 = sumCorr4 [ itrack ][ icent ] / sumM1111 [ itrack ][ icent ] ;
+
+if ( M1111 != 0.0 ) sumCorr4 [ tracknumber ][ centrality ] += corr4 * M1111 / ( M1111 );
+
+Double_t  corr4 = TMath::Power ( TComplex::Abs ( Q_n_1 ) , 4.0 )
+                      + TMath::Power ( TComplex::Abs ( Q_2n_2 ) , 2.0 )
+                      - 2.0 * ( Q_2n_2 * TComplex::Conjugate ( Q_n_1 ) * TComplex::Conjugate ( Q_n_1 ) ) . Re ()
+                      + 8.0 * ( Q_n_3 * TComplex::Conjugate ( Q_n_1 ) ) . Re () - 4.0 * S12 * TMath::Power ( TComplex::Abs ( Q_n_1 ) , 2.0 )
+                      - 6.0 * S14 + 2.0 * S22; //not same as the equation -2.0*S22
+
+TComplex  Q_n_1 = TComplex (  Q_n_1_r ,  Q_n_1_i );
+
+Double_t w = 1.0;
+if(mRapidity > 0.0) Q_n_1_r += w * TMath::Cos(n * phi);
+                    Q_n_1_i += w * TMath::Sin(n * phi);
+
+TComplex Q_2n_2 = TComplex ( Q_2n_2_r , Q_2n_2_i );
+if(mRapidity > 0.0)
+Q_2n_2_r += TMath::Power(w, 2.0) * TMath::Cos(2.0 * n * phi);
+Q_2n_2_i += TMath::Power(w, 2.0) * TMath::Sin(2.0 * n * phi);
+
+TComplex  Q_n_3 = TComplex (  Q_n_3_r ,  Q_n_3_i );
+
+if(mRapidity > 0.0)
+Q_n_3_r += TMath::Power(w, 3.0) * TMath::Cos(n * phi);
+Q_n_3_i += TMath::Power(w, 3.0) * TMath::Sin(n * phi);
+
+S12 += TMath::Power(w, 2.0);
+S13 += TMath::Power(w, 3.0);
+S14 += TMath::Power(w, 4.0);
+Double_t    S21 = TMath::Power ( S11 , 2.0 );
+
+
+Double_t S22 = TMath::Power ( S12 , 2.0 );
+
+Double_t  M1111 = S41 - 6.0 * S12 * S21 + 8.0 * S13 * S11 + 3.0 * S22 - 6.0 * S14;
+Double_t    S41 = TMath::Power ( S11 , 4.0 );
+
+S11 += w;
+Double_t    S41 = TMath::Power ( S11 , 4.0 );
+
+if ( M1111 != 0.0 ) sumM1111 [ tracknumber ][ centrality ] += ( M1111 );
+Double_t reference2_1 = sumCorr2 [ itrack ][ icent ] /   sumM11 [ itrack ][ icent ] ;
+if ( M11 != 0.0 ) sumCorr2 [ tracknumber ][ centrality ] +=  corr2 * M11 / ( M11 );
+
+//<2>=(|Q_n,1|^2-S_1,2)/(S_2,1 - S_1,2)
+Double_t  corr2 = TMath::Power ( TComplex::Abs ( Q_n_1 ) , 2.0 ) - S12;
+
+Double_t M11 = S21 - S12;
+
+if ( M11 != 0.0 ) sumM11 [ tracknumber ][ centrality ] += ( M11 );
+
+Double_t  correction1 = sumAddon1 [ itrack ][ icent ] /   sumS11 [ itrack ][ icent ] ;
+if ( S11 != 0.0 ) sumAddon1 [ tracknumber ][ centrality ] += addon1 * S11 / ( S11 );
+
+//<cos(nphi_1)>
+Double_t addon1 = Q_n_1 . Re (); 
+
+Double_t  correction7 =  sumAddon7 [ itrack ][ icent ] /  sumM111 [ itrack ][ icent ] ;
+
+if ( M111 != 0.0 ) sumAddon7 [ tracknumber ][ centrality ] += addon7 * M111 / ( M111 );
+
+//<cos(n(phi1-phi2-phi3))>
+Double_t addon7 = ( Q_n_1 * TComplex::Conjugate ( Q_n_1 ) * TComplex::Conjugate ( Q_n_1 ) - Q_n_1 * TComplex::Conjugate ( Q_2n_2 )
+                    - 2.0 * S12 * TComplex::Conjugate ( Q_n_1 ) + 2.0 * TComplex::Conjugate ( Q_n_3 ) ) . Re();
+Double_t   M111 = S31 - 3.0 * S12 * S11 + 2.0 * S13;
+
+Double_t    S31 = TMath::Power ( S11 , 3.0 );
+
+Double_t  correction2 = sumAddon2 [ itrack ][ icent ] /   sumS11 [ itrack ][ icent ];
+sumAddon2 [ tracknumber ][ centrality ] += addon2 * S11 / ( S11 );
+Double_t addon2 = Q_n_1 . Im ();
+if ( S11 != 0.0 ) sumS11 [ tracknumber ][ centrality ] += ( S11 );
+
+Double_t  correction8 =  sumAddon8 [ itrack ][ icent ] /  sumM111 [ itrack ][ icent ];
+if ( M111 != 0.0 ) sumAddon8 [ tracknumber ][ centrality ] += addon8 * M111 / ( M111 );
+
+ Double_t addon8 = ( Q_n_1 * TComplex::Conjugate ( Q_n_1 ) * TComplex::Conjugate ( Q_n_1 ) - Q_n_1 * TComplex::Conjugate ( Q_2n_2 )
+                    - 2.0 * S12 * TComplex::Conjugate ( Q_n_1 ) + 2.0 * TComplex::Conjugate ( Q_n_3 ) ) . Im();
+
+Double_t  correction5 =  sumAddon5 [ itrack ][ icent ] /   sumM11 [ itrack ][ icent ] ;
+
+if ( M11 != 0.0 ) sumAddon5 [ tracknumber ][ centrality ] += addon5 * M11 / ( M11 );
+
+Double_t addon5 = ( Q_n_1 * Q_n_1 - Q_2n_2 ) . Re ();
+
+Double_t  correction6 =  sumAddon6 [ itrack ][ icent ] /   sumM11 [ itrack ][ icent ];
+if ( M11 != 0.0 ) sumAddon6 [ tracknumber ][ centrality ] += addon6 * M11 / ( M11 );
+Double_t addon6 = ( Q_n_1 * Q_n_1 - Q_2n_2 ) . Im ();
+

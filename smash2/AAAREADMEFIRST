@@ -1,0 +1,6 @@
+For smash2 you must use root6, To get this do
+setup 64b
+setup ROOT 6.20.08
+
+see README_building_smash2.txt
+

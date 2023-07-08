@@ -1,0 +1,26 @@
+mkdir run_3_b0-14_hard2
+cp -d ../run_3_b0-14_hard/* .
+mkdir jobs
+mkdir logs
+
+
+edit runurqmdana.csh to set the energy correctly. - you may have to fool around with this.
+set the variable - bmin, bmax, set number, pot, numevt
+the set number is a number  you can set to differentiate different jobs. I usually go 1, 2, 3,
+
+check to see if one job runs 
+runurqmdana.csh 0
+
+runurqmd.job - change to submit the right number of jobs then
+condor_submit runurqmd.job
+
+all log files will be in logs
+
+output files - in jobs there will be a directorly for a particular run.
+In the will be the output files.
+
+cd jobs
+../haddit3.csh 
+  you will have to give it energies etc.
+
+

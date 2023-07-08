@@ -1,0 +1,19 @@
+AMPT tar files tar done, ampt.dat files deleted
+done deleted >19_1M_b0-14/
+done deleted 19melt3mb_10K_b6-7/
+200_10K_b6-7/
+200_150K_b0-14/
+200melt3mb_10K_b6-7/
+done deeleted> 27_1M_b0-14/
+done >3_1M_b0-14/
+done deleted >3_1M_b9-11/
+done deleted >3melt_1M_b9-11/
+3melt3mb_10K_b6-7/
+5000_5K_b0-2/
+5_10K_b6-7/
+5melt3mb_10K_b6-7/
+8_10K_b6-7/
+done deleted>8_1M_b0-14/
+8melt3mb_10K_b6-7/
+
+

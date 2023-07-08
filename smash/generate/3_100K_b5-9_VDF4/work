@@ -1,0 +1,7 @@
+cd job0
+ ln -s ~/work/v3/smash/smashtobnl/smash-master_copy/* .
+mkdir build
+cd build
+ cmake .. -DPythia_CONFIG_EXECUTABLE=/star/u/rseto/work/v3/smash/smashtobnl/pythia8303/bin/pythia8-config -DCMAKE_PREFIX_PATH=/star/u/rseto/work/v3/smash/smashtobnl/eigen/ -DGSL_ROOT_DIR=/star/u/rseto/work/v3/smash/smashtobnl/gsl -DUSE_ROOT=OFF -DUSE_HEPMC=OFF
+make
+smash

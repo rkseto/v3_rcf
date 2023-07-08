@@ -1,0 +1,32 @@
+June 15, 2022
+
+Run Jam
+make a new area: e.g. Jam1_3GeV_b0-14_RQMDS
+make area coalesc and run
+in both coalesc and run cp -d -r ../../template/coalesc/* .      run/* .
+in run: edit convert.cc
+then as readme says
+1. conf.mk: control the number of jobs   - right now each job does 500 events - controled in covert - turning on potentials - each job takes ~ 2hrs
+2. compile the code: make clone
+3. run the jobs: ./submit confirm
+
+then go to Data
+../catithadd Jam1_3GeV_b0-14_RQMDS
+
+mv convert* junk and delete
+Move all root files made by hadd to run jam1ana5  (right now on my laptop)
+
+-------------------------------
+Coalesc
+
+In coalesc put root files from run/Data into filelist
+then follow readme
+1. main function: dist.cc
+2. conf.mk: control the number of jobs
+3. compile the code: make clone
+4. run the jobs: ./submit confirm
+5. the final root files are saved in Data/
+
+on coalecs
+- make a haddit
+- make a cq

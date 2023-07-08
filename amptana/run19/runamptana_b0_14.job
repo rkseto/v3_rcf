@@ -1,0 +1,13 @@
+Universe       = vanilla
+Notification   = Error
+GetEnv         = True
+Initialdir     = $ENV(PWD)
+Executable     = /bin/csh
+Arguments      = $ENV(PWD)/runamptana_b0_14.csh $(process)
+Log            = $ENV(PWD)/logs/log_b0_14/myprog$(process).log
+Output         = $ENV(PWD)/logs/log_b0_14/myprog$(process).out
+Error          = $ENV(PWD)/logs/log_b0_14/myprog$(process).log
++Experiment    = "star"
++Job_Type      = "cas"
+Queue 100
+

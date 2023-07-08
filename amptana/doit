@@ -1,0 +1,82 @@
+#!/bin/bash
+if [[ -z "$1" ]]; then
+    echo "need two arguments  energy=3,5,8,19,200   1-nomelt 2-melt"
+    exit
+fi
+if [[ -z "$2" ]]; then
+    echo "need second argument  1-nomelt 2-melt"
+    exit
+fi
+if(($1 == 3 && $2 == 1)); then
+    echo "Energy is 3 GeV nomelt"
+    ln -sf ampt_3_10000_b6p5-7p5_400s.dat amptdata.dat
+    ls -l amptdata.dat
+    root -q amptana2.C+\(1,-1,0,0,3\)
+    mv -f amptana2.root amptana2_3GeV.root
+fi
+if(($1 == 3 && $2 == 2)); then
+    echo "Energy is 3 GeV melt"
+    ln -sf ampt_3_10000_b6p5-7p5_400s_melt.dat amptdata.dat
+    ls -l amptdata.dat
+    root -q amptana2.C+\(1,-1,0,0,3\)
+    mv -f amptana2.root amptana2_3GeV_melt.root
+fi
+if(($1 == 5 && $2 == 1)); then
+    echo "Energy is 5 GeV nomelt"
+    ln -sf ampt_5_10000_b6p5-7p5_400s.dat amptdata.dat
+    ls -l amptdata.dat
+    root -q amptana2.C+\(1,-1,0,0,5\)
+    mv -f amptana2.root amptana2_5GeV.root
+fi
+if(($1 == 5 && $2 == 2)); then
+    echo "Energy is 5 GeV melt"
+    ln -sf ampt_5_10000_b6p5-7p5_400s_melt.dat amptdata.dat
+    ls -l amptdata.dat
+    root -q amptana2.C+\(1,-1,0,0,5\)
+    mv -f amptana2.root amptana2_5GeV_melt.root
+fi
+if(($1 == 8 && $2 == 1)); then
+    echo "Energy is 8 GeV nomelt"
+    ln -sf ampt_8_10000_b6p5-7p5_400s.dat amptdata.dat
+    ls -l amptdata.dat
+    root -q amptana2.C+\(1,-1,0,0,7.7\)
+    mv -f amptana2.root amptana2_8GeV.root
+fi
+if(($1 == 8 && $2 == 2)); then
+    echo "Energy is 8 GeV melt"
+    ln -sf ampt_8_10000_b6p5-7p5_400s_melt.dat amptdata.dat
+    ls -l amptdata.dat
+    root -q amptana2.C+\(1,-1,0,0,7.7\)
+    mv -f amptana2.root amptana2_8GeV_melt.root
+fi
+if(($1 == 19 && $2 == 1)); then
+    echo "Energy is 19 GeV melt"
+    ln -sf ampt_19_10000_b6p5-7p5_400s.dat amptdata.dat
+    ls -l amptdata.dat
+    root -q amptana2.C+\(1,-1,0,0,19\)
+    mv -f amptana2.root amptana2_19GeV.root
+fi
+if(($1 == 19 && $2 == 2)); then
+    echo "Energy is 19 GeV melt"
+    ln -sf ampt_19_10000_b6p5-7p5_400s_melt.dat amptdata.dat
+    ls -l amptdata.dat
+    root -q amptana2.C+\(1,-1,0,0,19\)
+    mv -f amptana2.root amptana2_19GeV_melt.root
+fi
+if(($1 == 200 && $2 == 1)); then
+    echo "Energy is 200 GeV nomelt"
+    ln -sf ampt_200_10000_b6p5-7p5_400s.dat amptdata.dat
+    ls -l amptdata.dat
+    root -q amptana2.C+\(1,-1,0,0,200\)
+    mv -f amptana2.root amptana2_200GeV.root
+fi
+if(($1 == 200 && $2 == 2)); then
+    echo "Energy is 200 GeV melt"
+    ln -sf ampt_200_10000_b6p5-7p5_400s_melt.dat amptdata.dat
+    ls -l amptdata.dat
+    root -q amptana2.C+\(1,-1,0,0,200\)
+    mv -f amptana2.root amptana2_200GeV_melt.root
+fi
+exit
+
+

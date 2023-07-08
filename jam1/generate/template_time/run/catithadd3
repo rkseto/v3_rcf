@@ -1,0 +1,114 @@
+#!/bin/tcsh
+
+if ( "$1" == "" ) then      # parentheses not strictly needed in this simple case
+    echo "variable 1 is empty = set it to the string-label"
+    exit
+else 
+    echo "variable contains $1"
+endif
+
+hadd $1_all_0.root convert_000??_run/event_500.root
+hadd $1_all_1.root convert_001??_run/event_500.root
+hadd $1_all_2.root convert_002??_run/event_500.root
+hadd $1_all_3.root convert_003??_run/event_500.root
+hadd $1_all_4.root convert_004??_run/event_500.root
+hadd $1_all_5.root convert_005??_run/event_500.root
+hadd $1_all_6.root convert_006??_run/event_500.root
+hadd $1_all_7.root convert_007??_run/event_500.root
+hadd $1_all_8.root convert_008??_run/event_500.root
+hadd $1_all_9.root convert_009??_run/event_500.root 
+hadd $1_all_10.root convert_010??_run/event_500.root
+hadd $1_all_11.root convert_011??_run/event_500.root
+hadd $1_all_12.root convert_012??_run/event_500.root
+hadd $1_all_13.root convert_013??_run/event_500.root
+hadd $1_all_14.root convert_014??_run/event_500.root
+hadd $1_all_15.root convert_015??_run/event_500.root
+hadd $1_all_16.root convert_016??_run/event_500.root
+hadd $1_all_17.root convert_017??_run/event_500.root
+hadd $1_all_18.root convert_018??_run/event_500.root
+hadd $1_all_19.root convert_019??_run/event_500.root 
+hadd $1_all_20.root convert_020??_run/event_500.root
+hadd $1_all_21.root convert_021??_run/event_500.root
+hadd $1_all_22.root convert_022??_run/event_500.root
+hadd $1_all_23.root convert_023??_run/event_500.root
+hadd $1_all_24.root convert_024??_run/event_500.root
+hadd $1_all_25.root convert_025??_run/event_500.root
+hadd $1_all_26.root convert_026??_run/event_500.root
+hadd $1_all_27.root convert_027??_run/event_500.root
+hadd $1_all_28.root convert_028??_run/event_500.root
+hadd $1_all_29.root convert_029??_run/event_500.root 
+hadd $1_all_30.root convert_030??_run/event_500.root
+hadd $1_all_31.root convert_031??_run/event_500.root
+hadd $1_all_32.root convert_032??_run/event_500.root
+hadd $1_all_33.root convert_033??_run/event_500.root
+hadd $1_all_34.root convert_034??_run/event_500.root
+hadd $1_all_35.root convert_035??_run/event_500.root
+hadd $1_all_36.root convert_036??_run/event_500.root
+hadd $1_all_37.root convert_037??_run/event_500.root
+hadd $1_all_38.root convert_038??_run/event_500.root
+hadd $1_all_39.root convert_039??_run/event_500.root 
+hadd $1_all_40.root convert_040??_run/event_500.root
+hadd $1_all_41.root convert_041??_run/event_500.root
+hadd $1_all_42.root convert_042??_run/event_500.root
+hadd $1_all_43.root convert_043??_run/event_500.root
+hadd $1_all_44.root convert_044??_run/event_500.root
+hadd $1_all_45.root convert_045??_run/event_500.root
+hadd $1_all_46.root convert_046??_run/event_500.root
+hadd $1_all_47.root convert_047??_run/event_500.root
+hadd $1_all_48.root convert_048??_run/event_500.root
+hadd $1_all_49.root convert_049??_run/event_500.root 
+hadd $1_all_50.root convert_050??_run/event_500.root
+hadd $1_all_51.root convert_051??_run/event_500.root
+hadd $1_all_52.root convert_052??_run/event_500.root
+hadd $1_all_53.root convert_053??_run/event_500.root
+hadd $1_all_54.root convert_054??_run/event_500.root
+hadd $1_all_55.root convert_055??_run/event_500.root
+hadd $1_all_56.root convert_056??_run/event_500.root
+hadd $1_all_57.root convert_057??_run/event_500.root
+hadd $1_all_58.root convert_058??_run/event_500.root
+hadd $1_all_59.root convert_059??_run/event_500.root 
+hadd $1_all_60.root convert_060??_run/event_500.root
+hadd $1_all_61.root convert_061??_run/event_500.root
+hadd $1_all_62.root convert_062??_run/event_500.root
+hadd $1_all_63.root convert_063??_run/event_500.root
+hadd $1_all_64.root convert_064??_run/event_500.root
+hadd $1_all_65.root convert_065??_run/event_500.root
+hadd $1_all_66.root convert_066??_run/event_500.root
+hadd $1_all_67.root convert_067??_run/event_500.root
+hadd $1_all_68.root convert_068??_run/event_500.root
+hadd $1_all_69.root convert_069??_run/event_500.root 
+hadd $1_all_70.root convert_070??_run/event_500.root
+hadd $1_all_71.root convert_071??_run/event_500.root
+hadd $1_all_72.root convert_072??_run/event_500.root
+hadd $1_all_73.root convert_073??_run/event_500.root
+hadd $1_all_74.root convert_074??_run/event_500.root
+hadd $1_all_75.root convert_075??_run/event_500.root
+hadd $1_all_76.root convert_076??_run/event_500.root
+hadd $1_all_77.root convert_077??_run/event_500.root
+hadd $1_all_78.root convert_078??_run/event_500.root
+hadd $1_all_79.root convert_079??_run/event_500.root 
+hadd $1_all_80.root convert_080??_run/event_500.root
+hadd $1_all_81.root convert_081??_run/event_500.root
+hadd $1_all_82.root convert_082??_run/event_500.root
+hadd $1_all_83.root convert_083??_run/event_500.root
+hadd $1_all_84.root convert_084??_run/event_500.root
+hadd $1_all_85.root convert_085??_run/event_500.root
+hadd $1_all_86.root convert_086??_run/event_500.root
+hadd $1_all_87.root convert_087??_run/event_500.root
+hadd $1_all_88.root convert_088??_run/event_500.root
+hadd $1_all_89.root convert_089??_run/event_500.root 
+hadd $1_all_90.root convert_090??_run/event_500.root
+hadd $1_all_91.root convert_091??_run/event_500.root
+hadd $1_all_92.root convert_092??_run/event_500.root
+hadd $1_all_93.root convert_093??_run/event_500.root
+hadd $1_all_94.root convert_094??_run/event_500.root
+hadd $1_all_95.root convert_095??_run/event_500.root
+hadd $1_all_96.root convert_096??_run/event_500.root
+hadd $1_all_97.root convert_097??_run/event_500.root
+hadd $1_all_98.root convert_098??_run/event_500.root
+hadd $1_all_99.root convert_099??_run/event_500.root  convert_10000_run/event_500.root
+
+
+
+
+

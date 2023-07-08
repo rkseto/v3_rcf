@@ -1,0 +1,6 @@
+1. main function: dist.cc
+2. conf.mk: control the number of jobs
+3. compile the code: make clone
+4. run the jobs: ./submit confirm
+5. the final root files are saved in Data/
+

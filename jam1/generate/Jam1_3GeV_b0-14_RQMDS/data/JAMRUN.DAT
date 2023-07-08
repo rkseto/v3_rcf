@@ -1,0 +1,124 @@
+                                                                               
+ ******************************************************************************
+ ******************************************************************************
+ **                                                                          **
+ **                                                                          **
+ **   Welcome to the JAM Monte Carlo!                                        **
+ **                                                                          **
+ **   JJJJJJJJ  AAAA      MM     MMM                                         **
+ **      JJ    AA  AA     MMM    MMM                                         **
+ **      JJ   AAAAAAAA    MM MMMM MM                                         **
+ **   J  JJ  AA      AA   MM      MM                                         **
+ **   JJJJJ AA        AA  MM      MM                                         **
+ **                                                                          **
+ **    This is JAM  version 1.905                                            **
+ **  Last date of change: 31 Oct 2020                                        **
+ **                                                                          **
+ **                                                                          **
+ **                                                                          **
+ **  JAM is a free software which can                                        **
+ **  be distributed under the GNU Gen                                        **
+ **  eral Public License. There is no                                        **
+ **  warranty for the program.                                               **
+ **                                                                          **
+ **  Copyright (c) 1998 Yasushi Nara                                         **
+ **                                                                          **
+ **  Main author: Yasushi Nara;                                              **
+ **  Advance Science Research Center, Japan Atomic Energy Research Institute **
+ **  Tokai-mura, Naka-gun, Ibaraki-ken  319-1195, Japan                      **
+ **  e-mail: nara@aiu.ac.jp                                                  **
+ **                                                                          **
+ **                                                                          **
+ **                                                                          **
+ ******************************************************************************
+ ******************************************************************************
+
+
+      *******************************************************************
+      *                                                                 *
+      *          Reaction:                                              *
+      *                                                                 *
+      *              mass 197( 79,118) ==> mass 197( 79,118)            *
+      *                                                                 *
+      *              Collision of 197Au   on 197Au                      *
+      *                                                                 *
+      *                                                                 *
+      *               Beam energy   =      1.23 A GeV                   *
+      *               Beam momentum =      1.96 A GeV/c                 *
+      *               C.M. energy   =      2.42 A GeV                   *
+      *                                                                 *
+      *                               Beam        Target                *
+      *          Velocity/c:       0.6291051     -.6291051              *
+      *          Gamma factor:       1.286         1.286                *
+      *          p_x(GeV/c):         0.000         0.000                *
+      *          p_z(GeV/c):         0.760        -0.760                *
+      *          r_x(fm):            0.000         0.000                *
+      *          r_z(fm):           -5.167         5.167                *
+      *          ylab yproj:         0.740         0.740                *
+      *                                                                 *
+      *        Impact parameters are distributed according to b^2:      *
+      *                    2.000 < b <     2.000 (fm)                   *
+      *                                                                 *
+      *******************************************************************
+
+
+
+      * Input output file name: "jam.cfg        "
+      * Computational frame: nucl.-nucl. c.m.
+      * Random seed     =   1234561
+      * # of event      =     10
+      * Time step size  =100.000 fm/c
+      * # of timestep   =      1
+
+
+      * mstc(6) =     0 Simulation mode = Cascade mode  mstc(106)=  4
+
+
+                           per simulation     10 runs       1 parallel runs
+      -----------------------------------
+       Total collisions      =  2252.3000
+       Elastic collisions    =  1354.8000
+       Inelastic collisions  =   897.5000
+       Absorptions           =   357.8000
+       baryon-baryon coll.   =  1856.0000
+       meson-baryon coll.    =   392.5000
+       meson-meson coll.     =     3.8000
+       anti-B-B coll.        =     0.0000
+       hadron-parton coll.   =     0.0000
+       parton-parton coll.   =     0.0000
+       Resonance decays      =   428.8000
+       Total particles       =   465.0000
+       Mesons                =    71.0000
+       Pauli blocks          =   203.1000
+       RR->NN collisions     =   151.2000
+       Low energy cuts       = 0.1459E+06
+       Decay after simul.    =     0.3000
+       Mean formation time          =     0.0000    0.0000
+       Mean const. formation time   =     0.0000    0.0000
+
+
+       average number of jet=    0.0000
+       max. number of nv=      893
+       max. number of mentry=     1336
+       # of coll produced strangeness            =    0.1000
+       # of coll produced strangeness(const.q)   =    0.0000     0.0000%
+       # of string decay  produced strangeness   =    0.0000
+       # of resonance decay  produced strangeness=    0.6000     0.0000%
+
+
+ ==============================================================================
+          FINAL HADRON MULTIPLICITIES
+ ==============================================================================
+
+ total particle   465.00000000000000     
+ charged particle   216.60000000000002     
+ negative particle   29.300000000000001     
+ positive particle   187.30000000000001     
+   22        22  gamma                 1.40    
+  132       111  pi0                   24.0    
+  133       211  pi+                   16.3      pi-                   29.3    
+  252      2112  n0                    223.      nbar0                 0.00    
+  253      2212  p+                    171.      pbar-                 0.00    
+
+      * CPU time=   0 h   0 m   9 s
+      *******************************

@@ -1,0 +1,20 @@
+pro 197 79
+tar 197 79
+
+nev 100
+IMP 6. 7. 
+
+ene 1.23
+tim 200 200
+#potential 0:off 1: on
+eos 1
+#hydro 0:off 1: on
+cto 45 0
+
+f13
+#f14
+f15
+f16
+f19
+f20 
+

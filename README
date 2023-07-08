@@ -1,0 +1,12 @@
+area for running models for v3
+right now we are using
+1) jam1 (fortran version)
+2) smash2
+
+generating areas are in jam1 and smash2   in ./generate 
+  jam1- edit conf.mk (#jobs) and covert.cc (# events and parameters) - then follow instructions in readme.
+smash2-
+
+analyzing areas are jam1ana and smash2ana
+jam1ana-
+smash2ana

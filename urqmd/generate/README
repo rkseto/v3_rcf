@@ -1,0 +1,37 @@
+goto work/v3/urqmd/generate
+mkdir 3_100K_b0-14_hard2 or hard   (choosing hard or hard2 is important)
+ ***hard2 uses a special build of urqmd*** that changes the skyrme potential and allows energies
+above 3 GeV
+
+cd 3_100K_b0-14_hard2
+cp -d ../3_1M_b0-14_hard2/* .        [or hard!]
+mkdir jobs
+mkdir logs
+mkdir template
+cd template
+cp -d -r ../../3_1M_b0-14_hard2/template/* .
+
+then edit the following 
+1) rename thinputfile.3* to inputfile.3GeV_b0-14_hard2
+2) link inputfile.3GeV_b0-14_hard2 to ****inputfile.run****
+   we are using inputfile.run  which is a special version of inputfile set up so that the .csh file allows for the random number seed to be set  in ****runqmdrnd****
+3) edit inputfile.3GeV_b0-14_hard2
+   check a) energy (ecm for CM or ene for fxt)  b) b (IMP)  d) eos (0,  1-skyrme) e) hydro on or off. if it is on CTO 45 has to be 1   f) number of events
+
+4) edit condor_urqmd.job  to change the number of jobs submitted
+
+check that things are OK - condor_urqmd.csh 0   should start up job0
+
+Then submit
+condor_submit condor_urqmd.job
+
+after jobs finish
+cd jobs
+../catit 3_100K_b0-14_hard2    (this will cat many files together) to make *.f14 files
+
+to clean up
+mkdir junk
+mv job* junk
+cd junk
+rm -r -f *
+

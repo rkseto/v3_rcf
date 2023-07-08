@@ -1,0 +1,65 @@
+#!/bin/tcsh
+
+if ( "$1" == "" ) then      # parentheses not strictly needed in this simple case
+    echo "variable 1 is empty = set it to the string-label"
+    exit
+else 
+    echo "variable contains $1"
+endif
+
+hadd smash2_$1_all_0.root job?/data/0/smashdone.root job??/data/0/smashdone.root
+hadd smash2_$1_all_1.root job1??/data/0/smashdone.root
+hadd smash2_$1_all_2.root job2??/data/0/smashdone.root
+hadd smash2_$1_all_3.root job3??/data/0/smashdone.root
+hadd smash2_$1_all_4.root job4??/data/0/smashdone.root
+hadd smash2_$1_all_5.root job5??/data/0/smashdone.root
+hadd smash2_$1_all_6.root job6??/data/0/smashdone.root
+hadd smash2_$1_all_7.root job7??/data/0/smashdone.root
+hadd smash2_$1_all_8.root job8??/data/0/smashdone.root
+hadd smash2_$1_all_9.root job9??/data/0/smashdone.root
+
+hadd smash2_$1_all_10.root job10??/data/0/smashdone.root 
+hadd smash2_$1_all_11.root job11??/data/0/smashdone.root
+hadd smash2_$1_all_12.root job12??/data/0/smashdone.root
+hadd smash2_$1_all_13.root job13??/data/0/smashdone.root
+hadd smash2_$1_all_14.root job14??/data/0/smashdone.root
+hadd smash2_$1_all_15.root job15??/data/0/smashdone.root
+hadd smash2_$1_all_16.root job16??/data/0/smashdone.root
+hadd smash2_$1_all_17.root job17??/data/0/smashdone.root
+hadd smash2_$1_all_18.root job18??/data/0/smashdone.root
+hadd smash2_$1_all_19.root job19??/data/0/smashdone.root
+
+hadd smash2_$1_all_20.root job20??/data/0/smashdone.root
+hadd smash2_$1_all_21.root job21??/data/0/smashdone.root
+hadd smash2_$1_all_22.root job22??/data/0/smashdone.root
+hadd smash2_$1_all_23.root job23??/data/0/smashdone.root
+hadd smash2_$1_all_24.root job24??/data/0/smashdone.root
+hadd smash2_$1_all_25.root job25??/data/0/smashdone.root
+hadd smash2_$1_all_26.root job26??/data/0/smashdone.root
+hadd smash2_$1_all_27.root job27??/data/0/smashdone.root
+hadd smash2_$1_all_28.root job28??/data/0/smashdone.root
+hadd smash2_$1_all_29.root job29??/data/0/smashdone.root
+
+hadd smash2_$1_all_30.root job20??/data/0/smashdone.root
+hadd smash2_$1_all_31.root job21??/data/0/smashdone.root
+hadd smash2_$1_all_32.root job22??/data/0/smashdone.root
+hadd smash2_$1_all_33.root job23??/data/0/smashdone.root
+hadd smash2_$1_all_34.root job24??/data/0/smashdone.root
+hadd smash2_$1_all_35.root job25??/data/0/smashdone.root
+hadd smash2_$1_all_36.root job26??/data/0/smashdone.root
+hadd smash2_$1_all_37.root job27??/data/0/smashdone.root
+hadd smash2_$1_all_38.root job28??/data/0/smashdone.root
+hadd smash2_$1_all_39.root job29??/data/0/smashdone.root
+
+hadd smash2_$1_all_40.root job20??/data/0/smashdone.root
+hadd smash2_$1_all_41.root job21??/data/0/smashdone.root
+hadd smash2_$1_all_42.root job22??/data/0/smashdone.root
+hadd smash2_$1_all_43.root job23??/data/0/smashdone.root
+hadd smash2_$1_all_44.root job24??/data/0/smashdone.root
+hadd smash2_$1_all_45.root job25??/data/0/smashdone.root
+hadd smash2_$1_all_46.root job26??/data/0/smashdone.root
+hadd smash2_$1_all_47.root job27??/data/0/smashdone.root
+hadd smash2_$1_all_48.root job28??/data/0/smashdone.root
+hadd smash2_$1_all_49.root job29??/data/0/smashdone.root
+
+

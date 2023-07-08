@@ -1,0 +1,75 @@
+From: Helen Caines via Star-fcv-l <star-fcv-l@lists.bnl.gov>
+Subject: [Star-fcv-l] Fwd: Testing SMASH and RIVET
+Date: July 18, 2022 at 7:35:03 AM PDT
+To: "STAR Flow, Chirality and Vorticity PWG" <star-fcv-l@lists.bnl.gov>
+Reply-To: Helen Caines <helen.caines@yale.edu>, "STAR Flow, Chirality and Vorticity PWG" <star-fcv-l@lists.bnl.gov>
+
+HI All,
+
+ Please see below a request from the SMASH team for input comparing the results of their latest release to our data. If you are interested please feel free to reach out to them, but also let me know so I am aware that someone is working on it. I think it would be great if STAR could become involved in this effort. At the recent PAC meeting there was a recommendation that we maintain our close relationship with the theory community, this is one way to do that.
+
+Thanks
+
+Helen
+
+***********************
+Yale University
+Physics Dept. - Wright Lab.
+PO Box 208120
+New Haven, CT 06520
+203-432-5831
+***********************
+she/her/hers
+"Life is not about waiting for the storms to pass.
+It's about learning how to dance in the rain." - Vivian Greene
+
+
+Begin forwarded message:
+From: Hannah Elfner <elfner@itp.uni-frankfurt.de>
+Subject: Testing SMASH and RIVET
+Date: July 15, 2022 at 8:44:44 AM EDT
+To: Helen Caines <helen.caines@yale.edu>
+Cc: Jan Staudenmaier <staudenmaier@fias.uni-frankfurt.de>, Gabriele Inghirami <g.inghirami@gsi.de>
+
+Dear Helen,
+
+I am contacting you as STAR spokesperson with our question below. Please forward this to any of your collaborators who might be interested in running such a test and getting back to us. 
+
+We have recently finished a new SMASH release (SMASH-2.2), which finalizes our implementation of HepMC output and direct Rivet integration. Both can either just include the final hadrons of the calculation or the full event scattering history. For HepMC, we offer ASCII and now also ROOT format. We also added the functionality to include weak decay channels in order to match experimental particle detection.
+
+We would be very happy to collect some feedback from our experimental colleagues, if our implementation is sufficent to be used by Rivet analysis in order to streamline comparions between theory and experiment. The ideal scenario would be to run some short test runs with real analysis, also ensuring our documentation is complete. We are happy to include further changes for the new version, if issues occur.
+
+SMASH is online at Github https://github.com/smash-transport/smash and our documentation on Rivet and HepMC output are found in the SMASH User Guide (http://theory.gsi.de/~smash/userguide/2.2/index.html), specifically http://theory.gsi.de/~smash/userguide/2.2/output_hepmc_.html and http://theory.gsi.de/~smash/userguide/2.2/rivet_output_user_guide_.html.
+
+With the feedback either reply to this mail or contact Jan and Gabriele (in CC) directly as the ones working on the implementation.Any feedback by September would be greatly appreciated, but of course also at any later point in time. 
+
+Cheers,
+
+Hannah with Jan and Gabriele 
+
+-- 
+Prof. Dr. Hannah Elfner (Petersen)
+
+Professor for Theoretical Physics
+Frankfurt Institute for Advanced Studies (FIAS)
+Institut für Theoretische Physik
+Goethe Universität
+
+Ruth-Moufang-Straße 1
+D-60438 Frankfurt am Main
+Germany
+
+Head of Department Hot and Dense QCD Matter
+Coordinator of Theory Pillar
+GSI Helmholtzzentrum für Schwerionenforschung GmbH
+
+Phone: +49 (0)69 798 47652
+E-mail: elfner@fias.uni-frankfurt.de
+Webpage: https://www.elfner-group.science
+ORCID: https://orcid.org/0000-0002-6213-3613
+
+
+_______________________________________________
+Star-fcv-l mailing list
+Star-fcv-l@lists.bnl.gov
+https://lists.bnl.gov/mailman/listinfo/star-fcv-l

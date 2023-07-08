@@ -1,0 +1,8 @@
+#!/bin/bash
+for((i=0; i<10000; i++))
+   do
+condor_q
+echo "watching  19 GeV job"
+tail -5 ./logs/myprog$1.out
+sleep 300
+done

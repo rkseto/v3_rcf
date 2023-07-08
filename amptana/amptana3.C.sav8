@@ -1,0 +1,1652 @@
+// for looking at v3
+// load c++ and c headers
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <vector>
+
+#include "TChain.h"
+#include "TH1D.h"
+#include "TCanvas.h"
+#include "TPad.h"
+#include "TF1.h"
+#include "TH1.h"
+#include "TH2.h"
+#include "TProfile.h"
+#include "TProfile3D.h"
+#include "TFrame.h"
+#include "TROOT.h"
+#include "TLeaf.h"
+#include "TRandom.h"
+#include "TRandom3.h"
+#include "TFormula.h"
+#include "TPaveLabel.h"
+#include "TFile.h"
+#include "TMath.h"
+#include "TLeaf.h"
+#include "TComplex.h"
+
+#define PI 3.14159
+#define TWOPI 6.28318
+
+std::ifstream file;
+TChain *chain;
+Int_t nentries=0;
+
+double ybeam=0.;
+const double m_proton = 0.938;
+// charged
+const double m_pion = 0.140;
+const double m_kaon = 0.494;
+
+int eventnum=0;
+int testdummy=0;
+int number_particles=0;
+double b_impact=0;
+int npart_proj=0;
+int npart_targ=0;
+int nelas_proj=0;
+int ninelas_proj=0;
+int nelas_targ=0;
+int ninelas_targ=0;
+float dummy2=0;
+double rot=0;
+
+int part_id_in=0;
+double px_in=0;
+double py_in=0;
+double pz_in=0;
+double mass_in=0;
+double x_in=0;
+double y_in=0;
+double z_in=0;
+double t_in=0;
+
+int nev=0;
+
+// TLeaves that store track parameters
+TLeaf * leaf_PID; 
+TLeaf * leaf_Charge;
+TLeaf * leaf_Px;
+TLeaf * leaf_Py;
+TLeaf * leaf_Pz;
+TLeaf * leaf_Pt;
+TLeaf * leaf_Pmag;
+TLeaf * leaf_Eta;
+TLeaf * leaf_Phi;
+TLeaf * leaf_E;
+TLeaf * leaf_Rapidity;      
+
+// for my thrown event
+int nparticles=0;
+double phitrack[1200000];
+double pttrack[1200000];
+double ytrack[1200000];
+int nparticles_previous=0;
+double phitrack_previous[1200000];
+double pttrack_previous[1200000];
+double ytrack_previous[1200000];
+const int nparticlesmin=6;
+
+
+bool readit(int itype, int ido, int itrack);
+//define a function with parameters
+Double_t fitf(Double_t *xx,Double_t *par);
+int throwevent(int ievent);
+
+void amptana3(int itype=1,int ntodo=-1, int irot=0, int i_inject=0, double Ecm=7.7, double bmin=0., double bmax=14.) {
+    
+  if(itype<=0){
+    cout<<" aruments are: itype, 1=AMPT(make link to data) 2=RQMD 3=my generator(don't double inject flow)  ; ntodo=num events (-1 runs all); irot = 0 no rotation of reaction plane 1=rotate; i_inject=1  to inject flow; Ecm for calculations of eta regions and cuts "<<endl;
+    exit(1);
+  }
+  cout<<" Starting"<<endl;
+  cout<<"itype="<<itype<<" ntodo="<<ntodo<<" irot="<<irot<<" i_inject="<<i_inject<<" Ecm="<<Ecm<<" bmin="<<bmin<<" bmax="<<bmax<<endl;
+
+  double Ebeam=Ecm/2.;
+  double pzbeam=sqrt(Ebeam*Ebeam-m_proton*m_proton);
+  double ybeam=0.5*log((Ebeam+pzbeam)/(Ebeam-pzbeam));
+  cout<<" ybeam="<<ybeam<<endl;
+  
+  double v_injected[6]={0.1,0.2,0.15,0.05,0.,0.};  // injected flow
+
+  // initialize random numbers note: you don't seem to have to do this for RQMD
+  TRandom3 * ran0 = new TRandom3 ( 0 );
+ 
+  std::vector<int> eventnum_v;
+  std::vector<int> number_particles_v;
+  std::vector<double> b_impact_v;
+  std::vector<int> npart_proj_v;
+  std::vector<int> npart_targ_v;
+  std::vector<int> nelas_proj_v;
+  std::vector<int> ninelas_proj_v;
+  std::vector<int> nelas_targ_v;
+  std::vector<int> ninelas_targ_v;
+  std::vector <double> rot_v;
+  //  std::vector<std::vector <int>> part_id_v;
+  std::vector<std::vector <int> > part_id_v;
+  std::vector<std::vector <double> > px_v;
+  std::vector<std::vector <double> > py_v;
+  std::vector<std::vector <double> > pz_v;
+  std::vector<std::vector <double> > mass_v;
+  std::vector<std::vector <double> > x_v;
+  std::vector<std::vector <double> > y_v;
+  std::vector<std::vector <double> > z_v;
+  std::vector<std::vector <double> > t_v;
+  std::vector<std::vector <double> > energy_v;
+  std::vector<std::vector <double> > pt_v;
+  std::vector<std::vector <double> > rapidity_v;
+  std::vector<std::vector <double> > phi_v;
+  std::vector<std::vector <double> > eta_v;
+
+  // we will define our histograms here
+  // event level
+  TH1D *number_particlesh = new TH1D("number_particlesh","number_particlesh",1000,0.,10000);
+  TH1D *b_impacth = new TH1D("impacth","impacth",150,0.,15);
+  TH1D *n_participantsh = new TH1D("n_participantsh","n_participantsh",400,0.,400.);
+  
+  // particle level
+  TH1D *infoh = new TH1D("infoh","1-itype ",10,0,10);
+  TH1D *part_idh = new TH1D("part_idh","part_id",1000,0.,10000);
+  TH1D *part_id2h = new TH1D("part_id2h","part_id for clusters",1000,0.,2000000000);
+
+  TH1D *pxh = new TH1D("pxh","pxh",1000,0.,5);
+  TH1D *pyh = new TH1D("pyh","pyh",1000,0.,5);
+  TH1D *pzh = new TH1D("pzh","pzh",100,0.,20);
+
+  TH1D *xh = new TH1D("xh","xh",1000,0.,6);
+  TH1D *yh = new TH1D("yh","yh",1000,0.,6);
+  TH1D *zh = new TH1D("zh","zh",100,0.,20);
+  TH1D *th = new TH1D("th","th",1000,0.,6);
+
+  TH2D *ptpzh = new TH2D("ptpzh","ptpzh all participant nucleons",100,0.0,10.0,200.0,0.0,100.0);
+  TH2D *etayh = new TH2D("etayh","etayh all participant nucleons",100, -8.0, 8.0,100,-8.0,8.0);
+  TH2D *xvsz_allnh = new TH2D("xvsz_allnh","xvszh all participant nucleons",150,-15.,15.,300,-30.,30.);
+  TH2D *xvst_allnh = new TH2D("xvst_allnh","xvsth all participant nucleons",100,-20.,20.,250,0.,50.);
+  TH2D *ptvst_allnh = new TH2D("ptvst_allnh","pt vs t all participant nucleons",100,0.,5.,250,0.,50.);
+  TH2D *etavst_allnh = new TH2D("etavst_allnh","eta vs t participant all nucleons",100,-10.,10.,250,0.,50.);
+  TH2D *rapidityvst_allnh = new TH2D("rapidityvst_allnh","rapidity vs t all participant nucleons",100,-10.,10.,250,0.,50.);
+
+  TH2D *pxvst_allnh = new TH2D("pxvst_allnh","pxvsth all participant  nucleons",120,-30.,30.,250,0.,50.);
+  TH2D *pyvst_allnh = new TH2D("pyvst_allnh","pyvsth all participant nucleons",120,-30.,30.,250,0.,50.);
+  TH2D *pzvst_allnh = new TH2D("pzvst_allnh","pzvsth all participant nucleons",200,-50.,50.,250,0.,50.);  
+
+  TH2D *pxvstposrap_allnh = new TH2D("pxvstposrap_allnh","pxvstposraph all participant  nucleons",120,-30.,30.,250,0.,50.);
+  TH2D *pyvstposrap_allnh = new TH2D("pyvstposrap_allnh","pyvstposraph all participant nucleons",120,-30.,30.,250,0.,50.);
+  TH2D *pzvstposrap_allnh = new TH2D("pzvstposrap_allnh","pzvstposraph all participant nucleons",200,-50.,50.,250,0.,50.);  
+
+  TH2D *pxvstybeam_allnh = new TH2D("pxvstybeam_allnh","pxvstybeamh all participant  nucleons",120,-30.,30.,250,0.,50.);
+  TH2D *pyvstybeam_allnh = new TH2D("pyvstybeam_allnh","pyvstybeamh all participant nucleons",120,-50.,50.,250,0.,50.);
+  TH2D *pzvstybeam_allnh = new TH2D("pzvstybeam_allnh","pzvstybeamh all participant nucleons",200,-50.,50.,250,0.,50.);  
+
+  TProfile *cth1vst_allnh = new TProfile("cth1vst_allnh","cth1vsth all participant nucleons",250,0.,50.,-1.,1.);  
+  TProfile *cth1vstposrap_allnh = new TProfile("cth1vstposrap_allnh","cth1vstposraph all participant nucleons",250,0.,50.,-1.,1.);  
+  TProfile *cth1vstybeam_allnh = new TProfile("cth1vstybeam_allnh","cth1vstybeamh all participant nucleons",250,0.,50.,-1.,1.);  
+
+  TProfile *cth2vst_allnh = new TProfile("cth2vst_allnh","cth2vsth all participant nucleons",250,0.,50.,-1.,1.);  
+  TProfile *cth2vstposrap_allnh = new TProfile("cth2vstposrap_allnh","cth2vstposraph all participant nucleons",250,0.,50.,-1.,1.);  
+  TProfile *cth2vstybeam_allnh = new TProfile("cth2vstybeam_allnh","cth2vstybeamh all participant nucleons",250,0.,50.,-1.,1.);  
+
+  TProfile *cth3vst_allnh = new TProfile("cth3vst_allnh","cth3vsth all participant nucleons",250,0.,50.,-1.,1.);  
+  TProfile *cth3vstposrap_allnh = new TProfile("cth3vstposrap_allnh","cth3vstposraph all participant nucleons",250,0.,50.,-1.,1.);  
+  TProfile *cth3vstybeam_allnh = new TProfile("cth3vstybeam_allnh","cth3vstybeamh all participant nucleons",250,0.,50.,-1.,1.);  
+  
+  TH1D *pth = new TH1D("pth","pt",100,0.,5);
+  TH2D *xvsyh = new TH2D("xvsyh","xvsyh",150,-15.,15.,150,-15.,15.);
+  TH2D *zvsth = new TH2D("zvsth","zvsth",100,-20.,20.,250,0.,50.);
+
+  TH2D *xvsth = new TH2D("xvsth","xvsth",100,-20.,20.,250,0.,50.);
+  TH2D *yvsth = new TH2D("yvsth","yvsth",100,-20.,20.,250,0.,50.);
+  
+  TH2D *rvsth = new TH2D("rvsth","rvsth",100,0.,20.,250,0.,50.);
+  TH1D *rapidityh = new TH1D("rapidityh","rapidityh",120,-6.,6.);
+  TH1D *phih = new TH1D("phih","phi",100,-TWOPI,TWOPI);
+  TH1D *etah = new TH1D("etah","etah",100,-5.,5.);  
+
+  TH1D *phi_p_cuth = new TH1D("phi_p_cuth","phi_p_cuth",100,-TWOPI,TWOPI);
+  TH1D *phi_p_cut2h = new TH1D("phi_p_cut2h","phi_p_cut2h",100,-TWOPI,TWOPI);
+  TH2D *xvsy_p_cuth = new TH2D("xvsy_p_cuth","xvsy_p_cuth",150,-15.,15.,150,-15.,15.);
+  TH2D *xvsy_p_cut2h = new TH2D("xvsy_p_cut2h","xvsy_p_cut2h",150,-15.,15.,150,-15.,15.);
+  TH2D *xvszh = new TH2D("xvszh","xvszh all part nucleons",150,-15.,15.,300,-30.,30.);
+  TH2D *xvszybeamh = new TH2D("xvszybeamh","xvszybeamh all part nucleons eta>ybeam",150,-15.,15.,300,-30.,30.);
+  TH1D *part_idybeamh = new TH1D("part_idybeamh","part_id eta>ybeam",2500,0.,2500);
+
+  TH1D *phi_p_posraph = new TH1D("phi_p_posraph","phi_p_posraph",100,-TWOPI,TWOPI);
+  TH1D *phi_p_negraph = new TH1D("phi_p_negraph","phi_p_negraph",100,-TWOPI,TWOPI);
+  TH2D *xvsy_p_posraph = new TH2D("xvsy_p_posraph","xvsy_p_posraph",150,-15.,15.,150,-15.,15.);
+  TH2D *xvsy_p_negraph = new TH2D("xvsy_p_negraph","xvsy_p_negraph",150,-15.,15.,150,-15.,15.);
+  
+  TH2D *xvsyallh = new TH2D("xvsyallh","xvsyallh",150,-15.,15.,150,-15.,15.);
+  TH2D *zvstallh = new TH2D("zvstallh","zvstallh",100,-20.,20.,250,0.,50.);
+  TH2D *xvsyspech = new TH2D("xvsyspech","xvsyspech",150,-15.,15.,150,-15.,15.);
+  TH2D *xvszspech = new TH2D("xvszspech","xvszspech",150,-15.,15.,300,-30.,30.);
+  TH2D *zvstspech = new TH2D("zvstspech","zvstspech",100,-20.,20.,250,0.,50.);
+  
+  TH1D *reactionplanerotationh = new TH1D("reactionplanerotationh","reactionplanerotation",180,-PI,PI);
+  TH1D *PSI1h = new TH1D("PSI1h","PSI1h",180,-PI,PI);
+  TH1D *PSI2h = new TH1D("PSI2h","PSI2h",180,-PI,PI);
+  TH1D *PSI3h = new TH1D("PSI3h","PSI3h",180,-PI,PI);
+  TH1D *PSI4h = new TH1D("PSI4h","PSI4h",180,-PI,PI);
+
+  TH2D *x0y0h = new TH2D("x0y0h","x0y0h",100,-10.,10.,100,-10.,10.);
+  TH2D *x0y0posraph = new TH2D("x0y0posraph","x0y0posraph",100,-10.,10.,100,-10.,10.);
+  TH2D *x0y0negraph = new TH2D("x0y0negraph","x0y0negraph",100,-10.,10.,100,-10.,10.);
+
+  TH1D *phixyh = new TH1D("phixyh","phixyh",180,-TWOPI,TWOPI);
+  TH1D *phixyposraph = new TH1D("phixyposraph","phixyposraph",180,-TWOPI,TWOPI);
+  TH1D *phixynegraph = new TH1D("phixynegraph","phixynegraph",180,-TWOPI,TWOPI);
+
+  TH1D *rsqh = new TH1D("rsqh","rsqh",100,0.,200.);
+  TH1D *rsqposraph = new TH1D("rsqposraph","rsqposraph",100,0.,200.);
+  TH1D *rsqnegraph = new TH1D("rsqnegraph","rsqnegraph",100,0.,200.);
+
+  TH1D *rsqavh = new TH1D("rsqavh","rsqavh",100,0.,200.);
+  TH1D *rsqavposraph = new TH1D("rsqavposraph","rsqavposraph",100,0.,200.);
+  TH1D *rsqavnegraph = new TH1D("rsqavnegraph","rsqavnegraph",100,0.,200.);
+
+  TH1D *eps1h = new TH1D("eps1h","eps1h p/n particpants",100,0.,1.);
+  TH1D *eps2h = new TH1D("eps2h","eps2h p/n particpants",100,0.,1.);
+  TH1D *eps3h = new TH1D("eps3h","eps3h p/n particpants",100,0.,1.);
+  TH1D *eps4h = new TH1D("eps4h","eps4h p/n particpants",100,0.,1.);
+  TH1D *eps5h = new TH1D("eps5h","eps5h p/n particpants",100,0.,1.);
+  TH1D *eps6h = new TH1D("eps6h","eps6h p/n particpants",100,0.,1.);
+
+  TH1D *eps1posraph = new TH1D("eps1posraph","eps1posraph eta>ybeam/2 p/n particpants",100,0.,1.);
+  TH1D *eps2posraph = new TH1D("eps2posraph","eps2posraph eta>ybeam/2p/n particpants",100,0.,1.);
+  TH1D *eps3posraph = new TH1D("eps3posraph","eps3posraph eta>ybeam/2 p/n particpants not recentered",100,0.,1.);
+
+  TH1D *eps4posraph = new TH1D("eps4posraph","eps4posraph eta>ybeam/2 p/n particpants",100,0.,1.);
+  TH1D *eps5posraph = new TH1D("eps5posraph","eps5posraph eta>ybeam/2 p/n particpants",100,0.,1.);
+  TH1D *eps6posraph = new TH1D("eps6posraph","eps6posraph eta>ybeam/2 p/n particpants",100,0.,1.);
+
+  TH1D *eps1negraph = new TH1D("eps1negraph","eps1negraph eta<-ybeam/2 p/n particpants",100,0.,1.);
+  TH1D *eps2negraph = new TH1D("eps2negraph","eps2negraph eta<-ybeam/2 p/n particpants",100,0.,1.);
+  TH1D *eps3negraph = new TH1D("eps3negraph","eps3negraph eta<-ybeam/2 p/n particpants not recentered",100,0.,1.);
+
+  TH1D *eps4negraph = new TH1D("eps4negraph","eps4negraph eta<-ybeam/2 p/n particpants",100,0.,1.);
+  TH1D *eps5negraph = new TH1D("eps5negraph","eps5negraph eta<-ybeam/2 p/n particpants",100,0.,1.);
+  TH1D *eps6negraph = new TH1D("eps6negraph","eps6negraph eta<-ybeam/2 p/n particpants",100,0.,1.);
+
+  TH1D *PSI1posraph = new TH1D("PSI1posraph","PSI1posraph",180,-PI,PI);
+  TH1D *PSI1negraph = new TH1D("PSI1negraph","PSI1negraph",180,-PI,PI);
+  TH1D *PSI2posraph = new TH1D("PSI2posraph","PSI2posraph",180,-PI,PI);
+  TH1D *PSI2negraph = new TH1D("PSI2negraph","PSI2negraph",180,-PI,PI);  
+  TH1D *PSI3posraph = new TH1D("PSI3posraph","PSI3posraph",180,-PI,PI);
+  TH1D *PSI3negraph = new TH1D("PSI3negraph","PSI3negraph",180,-PI,PI);
+  
+  TH2D *PSI1_roth = new TH2D("PSI1_roth","PSI1_roth",180,-PI,PI,180,-PI,PI);
+  TH2D *PSI2_roth = new TH2D("PSI2_roth","PSI2_roth",180,-PI,PI,180,-PI,PI);
+  TH2D *PSI3_roth = new TH2D("PSI3_roth","PSI3_roth",180,-PI,PI,180,-PI,PI);
+  TH2D *PSI4_roth = new TH2D("PSI4_roth","PSI4_roth",180,-PI,PI,180,-PI,PI);
+  
+  TH1D *v1_RP1h = new TH1D("v1_RP1h","v1_RP1",100,-0.5,0.5);
+  TH1D *v2_RP1h = new TH1D("v2_RP1h","v2_RP1",100,-0.5,0.5);
+  TH1D *v3_RP1h = new TH1D("v3_RP1h","v3_RP1",100,-0.5,0.5);
+  TH1D *v4_RP1h = new TH1D("v4_RP1h","v4_RP1",100,-0.5,0.5);
+  TH1D *v5_RP1h = new TH1D("v5_RP1h","v5_RP1",100,-0.5,0.5);
+  TH1D *v6_RP1h = new TH1D("v6_RP1h","v6_RP1",100,-0.5,0.5);  
+  TH1D *v2_RP2h = new TH1D("v2_RP2h","v2_RP2",100,-0.5,0.5);
+  TH1D *v4_RP2h = new TH1D("v4_RP2h","v4_RP2",100,-0.5,0.5);
+  TH1D *v6_RP2h = new TH1D("v6_RP2h","v6_RP2",100,-0.5,0.5);  
+  TH1D *v3_RP3h = new TH1D("v3_RP3h","v3_RP3",100,-0.5,0.5);
+  TH1D *v6_RP3h = new TH1D("v6_RP3h","v6_RP3",100,-0.5,0.5);
+
+  TH1D *costermh = new TH1D("costermh","costerm",100,-2,2);
+  
+  infoh->Fill(1,itype);
+  
+  int ncount=500;
+
+  //  int itype=1; // ampt
+  //int itype=2; // rqmd
+
+  //=================================1=======================================
+  // read in event loop
+  if(!readit(itype,0,0)){
+    cout<<" file amptdata.dat not found"<<endl;
+    exit(1);
+  }
+
+  if(ntodo>1200000){
+    ntodo=1200000;
+    cout<<" because of array size max number of events is 1.2M"<<endl;
+  }
+  
+  //  std::ifstream file("amptdata.dat");
+  for(int i=0; i<9999999; i++){   //begin event loop read in
+    if(!readit(itype,1,0))break; // read next event
+    //    cout<<"  test b_impact bmin bmax "<<b_impact<<" "<<bmin<<" "<<bmax<<" i="<<i<<endl;
+    //    if(b_impact<bmin || b_impact>bmax)continue; // this does funny things
+    
+    nev++;
+    if ( (itype==2) && (nev + 1 > nentries) ) break;     
+
+    if(nev%ncount==0)cout<<" events read="<<nev<<endl;
+    if(ntodo>0 && nev > ntodo)break;
+
+    //    cout<<" num particles="<<number_particles<<endl;
+    
+    std::vector <int> part_id;
+    std::vector <double> px;
+    std::vector <double> py;
+    std::vector <double> pz;
+    std::vector <double> mass;
+    std::vector <double> x;
+    std::vector <double> y;
+    std::vector <double> z;
+    std::vector <double> t;
+    std::vector <double> energy;
+    std::vector <double> pt;
+    std::vector <double> rapidity;
+    std::vector <double> phi;
+    std::vector <double> eta;
+
+    // generate uniformly randomly distributed "reaction plane"
+    if(irot>0)rot = ran0->Rndm()*2.0 * PI-PI;
+    rot_v.push_back(rot);
+    
+    for (int i=0; i< number_particles; i++){
+      //      file>>part_id_in>>px_in>>py_in>>pz_in>>mass_in>>x_in>>y_in>>z_in>>t_in;
+      if(!readit(itype,2,i)){     //read one particle
+	cout<<" something went wrong. reached end of file in middle of event, exiting"<<endl;
+	exit(1);
+      }
+      //      cout<<" i="<<i<<" part_id_in="<<part_id_in<<endl;
+
+      // rotate the event around z axis if irot = 1
+
+      if(irot>0){
+	double px_inp = px_in*cos(rot)-py_in*sin(rot);
+	double py_inp = px_in*sin(rot)+py_in*cos(rot);
+	px_in=px_inp;
+	py_in=py_inp;
+	double x_inp = x_in*cos(rot)-y_in*sin(rot);
+	double y_inp = x_in*sin(rot)+y_in*cos(rot);
+	x_in=x_inp;
+	y_in=y_inp;
+	reactionplanerotationh->Fill(rot);  
+      }
+
+      // injecting flow into system     
+      if(i_inject>0){
+	// inject flow
+	double PSI_injected_direction=0.;
+	double rot_flow_injected=0;
+	double phi_orig=atan2(py_in,px_in);
+	for(int nn_injected=0; nn_injected<6; nn_injected++){
+	  int n_injected=nn_injected+1;
+	  rot_flow_injected+= -2/n_injected*v_injected[nn_injected]*sin(n_injected*(phi_orig-PSI_injected_direction));
+	}
+	double px_inp = px_in*cos(rot_flow_injected)-py_in*sin(rot_flow_injected);
+	double py_inp = px_in*sin(rot_flow_injected)+py_in*cos(rot_flow_injected);
+	px_in=px_inp;
+	py_in=py_inp;
+	double x_inp = x_in*cos(rot_flow_injected)-y_in*sin(rot_flow_injected);
+	double y_inp = x_in*sin(rot_flow_injected)+y_in*cos(rot_flow_injected);
+	x_in=x_inp;
+	y_in=y_inp;
+      }
+      // end - injecting flow
+      
+      part_id.push_back(part_id_in);
+      px.push_back(px_in);
+      py.push_back(py_in);
+      pz.push_back(pz_in);
+      mass.push_back(mass_in);
+      x.push_back(x_in);
+      y.push_back(y_in);
+      z.push_back(z_in);
+      t.push_back(t_in);
+      
+      energy.push_back(sqrt(px_in*px_in+py_in*py_in+pz_in*pz_in+mass_in*mass_in));
+      pt.push_back(sqrt(px_in*px_in+py_in*py_in));
+      rapidity.push_back(0.5*log((energy[i]+pz_in)/(energy[i]-pz_in)));
+      phi.push_back(atan2(py_in,px_in));
+      double theta=acos(pz_in/sqrt(px_in*px_in+py_in*py_in+pz_in*pz_in));
+      eta.push_back(-log(tan(theta/2.)));
+
+    } // end particle read in loop
+    
+    eventnum_v.push_back(eventnum);
+    number_particles_v.push_back(number_particles);
+    b_impact_v.push_back(b_impact);
+    npart_proj_v.push_back(npart_proj);
+    npart_targ_v.push_back(npart_targ);
+    nelas_proj_v.push_back(nelas_proj);
+    ninelas_proj_v.push_back(ninelas_proj);
+    nelas_targ_v.push_back(nelas_targ);
+    ninelas_targ_v.push_back(ninelas_targ);
+    part_id_v.push_back(part_id);
+    px_v.push_back(px);
+    py_v.push_back(py);
+    pz_v.push_back(pz);
+    mass_v.push_back(mass);
+    x_v.push_back(x);
+    y_v.push_back(y);
+    z_v.push_back(z);
+    t_v.push_back(t);
+    energy_v.push_back(energy);
+    pt_v.push_back(pt);
+    rapidity_v.push_back(rapidity);
+    phi_v.push_back(phi);
+    eta_v.push_back(eta);        
+  } // event loop read in
+  readit(itype,-1,0);
+  cout<<" FINISHED READING IN FILE, number of events="<<nev<<endl;
+  // nev might be 1 more than it should be!!
+
+  nev--;  
+  
+  //===============================2=================================== 
+  // define a bunch of stuff outside the loops
+  ncount=500;
+
+  double PSI[6]={0}; // reaction plane
+  
+  std::vector <int> part_id;
+  std::vector <double> px;
+  std::vector <double> py;
+  std::vector <double> pz;
+  std::vector <double> mass;
+  std::vector <double> x;
+  std::vector <double> y;
+  std::vector <double> z;
+  std::vector <double> t;
+  std::vector <double> energy;
+  std::vector <double> pt;
+  std::vector <double> rapidity;
+  std::vector <double> phi;
+  std::vector <double> eta;
+
+  int nevbmin=0;
+  int nevbmax=0;
+  
+  // event loop 2   plotting stuff and finding reaction plane
+  for(int iev=0; iev<nev; iev++){
+    if(iev%ncount==0)cout<<" 2 eventnum="<<iev<<endl;
+    if(ntodo>0 && iev > ntodo)break;
+
+    eventnum=eventnum_v[iev];
+    number_particles=number_particles_v[iev];
+    b_impact=b_impact_v[iev];
+    npart_proj=npart_proj_v[iev];
+    npart_targ=npart_targ_v[iev];
+    nelas_proj=nelas_proj_v[iev];
+    ninelas_proj=ninelas_proj_v[iev];
+    nelas_targ=nelas_targ_v[iev];
+    ninelas_targ=ninelas_targ_v[iev];
+    rot = rot_v[iev];
+    part_id=part_id_v[iev];
+    px=px_v[iev];
+    py=py_v[iev];
+    pz=pz_v[iev];
+    mass=mass_v[iev];
+    x=x_v[iev];
+    y=y_v[iev];
+    z=z_v[iev];
+    t=t_v[iev];
+    energy=energy_v[iev];
+    pt=pt_v[iev];
+    rapidity=rapidity_v[iev];
+    phi=phi_v[iev];
+    eta=eta_v[iev];
+
+    if(b_impact<bmin)nevbmin++;
+    if(b_impact<bmax)nevbmax++;
+    
+    if(b_impact<bmin || b_impact>bmax)continue; 
+    
+    number_particlesh->Fill(number_particles);
+    b_impacth->Fill(b_impact);
+    n_participantsh->Fill(npart_proj+npart_targ);
+
+    double ptmin=0.0001; // a cut of p=0 is the same as setting tmin=0.5
+    double tmin=0.5; // to cut spectators set tmin=0.5  
+    double tmax=400*0.2; // AMPT only follows stuff 400*0.2 fm =10 rm
+   //    double bmin=0;
+    //    double bmax=14.;
+
+    //    bmin=3;
+    //    bmax=5;
+
+    //    double etamin=0.5;
+    double etamin=ybeam/2.;
+    //    double etamin=ybeam;
+
+    
+    // plot stuff   
+    for (int i=0; i< number_particles; i++){
+
+      double cth1=cos(phi[i]);
+      double cth2=cos(2*phi[i]);
+      double cth3=cos(3*phi[i]);
+      
+      xvsyallh->Fill(x[i],y[i]);
+      zvstallh->Fill(z[i],t[i]);
+      if(pt[i]<ptmin)xvsyspech->Fill(x[i],y[i]);
+      if(pt[i]<ptmin)xvszspech->Fill(x[i],z[i]);
+      if(pt[i]<ptmin)zvstspech->Fill(z[i],t[i]);
+      if(pt[i]<ptmin && eta[i]>ybeam && t[i]<tmax)part_idybeamh->Fill(part_id[i]);
+      
+      
+      if(part_id[i]==2112||part_id[i]==2212) {
+      // study all particles incl spectators      
+	// pt=0 then it gets rid of anything with t=0.2
+	//	if(pt[i]<0.0001)cout<<" pt="<<pt[i]<<" t="<<t[i]<<" iev="<<iev<<" i="<<i<<endl;
+	//	if(t[i]==0.2)cout<<" pt="<<pt[i]<<" t="<<t[i]<<" iev="<<iev<<" i="<<i<<endl;
+	if(pt[i]<ptmin)continue;
+	if(t[i]>tmax)continue; // AMPT only follows stuff 400*0.2 fm =80 fm
+	ptpzh->Fill(pt[i],pz[i] );    
+	etayh->Fill(eta[i],y[i]);
+	xvsz_allnh->Fill(x[i],z[i]);     
+	xvst_allnh->Fill(x[i],t[i]);     
+	ptvst_allnh->Fill(pt[i],t[i]); 
+	etavst_allnh->Fill(eta[i],t[i]); 
+	rapidityvst_allnh->Fill(y[i],t[i]); 
+	pxvst_allnh->Fill(x[i],t[i]);
+	pyvst_allnh->Fill(y[i],t[i]);
+	pzvst_allnh->Fill(z[i],t[i]);
+	cth1vst_allnh->Fill(t[i],cth1);
+	cth2vst_allnh->Fill(t[i],cth2);
+	cth3vst_allnh->Fill(t[i],cth3);
+
+	if(eta[i]>etamin){
+	  pxvstposrap_allnh->Fill(x[i],t[i]);
+	  pyvstposrap_allnh->Fill(y[i],t[i]);
+	  pzvstposrap_allnh->Fill(z[i],t[i]);
+	  cth1vstposrap_allnh->Fill(t[i],cth1);
+	  cth2vstposrap_allnh->Fill(t[i],cth2);
+	  cth3vstposrap_allnh->Fill(t[i],cth3);
+	  
+	  if(eta[i]>ybeam){
+	    pxvstybeam_allnh->Fill(x[i],t[i]);
+	    pyvstybeam_allnh->Fill(y[i],t[i]);
+	    pzvstybeam_allnh->Fill(z[i],t[i]);
+	    cth1vstybeam_allnh->Fill(t[i],cth1);
+	    cth2vstybeam_allnh->Fill(t[i],cth2);
+	    cth3vstybeam_allnh->Fill(t[i],cth3);
+	  }
+	}
+      }
+
+      if(pt[i]<ptmin)continue; // only plot participants
+      if(t[i]>tmax)continue; // AMPT only follows stuff 400*0.2 fm =80 fm
+
+      //      if(abs(eta[i])>5.)continue;
+      //      if(phi[i]==0.)cout<<" phi="<<i<<" "<<phi[i]<<" "<<px[i]<<" "<<py[i]<<" "<<pz[i]<<" eta="<<eta[i]<<endl;
+      xvsyh->Fill(x[i],y[i]);
+
+      if(eta[i]>etamin && (part_id[i]==2112||part_id[i]==2212) && b_impact>bmin && b_impact<bmax) xvsy_p_cuth->Fill(x[i],y[i]);
+      if(eta[i]<-etamin && (part_id[i]==2112||part_id[i]==2212) && b_impact>bmin && b_impact<bmax) xvsy_p_cut2h->Fill(x[i],y[i]);  
+      if(abs(eta[i])>etamin && (part_id[i]==2112||part_id[i]==2212))xvszh->Fill(x[i],z[i]);
+      if(abs(eta[i])>ybeam && (part_id[i]==2112||part_id[i]==2212))xvszybeamh->Fill(x[i],z[i]);
+      if(eta[i]>etamin && (part_id[i]==2112||part_id[i]==2212) && b_impact>bmin && b_impact<bmax)phi_p_cuth->Fill(phi[i]);
+      if(eta[i]<-etamin && (part_id[i]==2112||part_id[i]==2212) && b_impact>bmin && b_impact<bmax)phi_p_cut2h->Fill(phi[i]);
+
+      if(eta[i]>etamin)phi_p_posraph->Fill(phi[i]);
+      if(eta[i]<-etamin)phi_p_negraph->Fill(phi[i]);
+      if(eta[i]>etamin)xvsy_p_posraph->Fill(x[i],y[i]);
+      if(eta[i]<-etamin)xvsy_p_negraph->Fill(x[i],y[i]);
+      
+      zvsth->Fill(z[i],t[i]);
+      xvsth->Fill(x[i],t[i]);
+      yvsth->Fill(y[i],t[i]);
+      rvsth->Fill(sqrt(x[i]*x[i]+y[i]*y[i]),t[i]);
+      part_idh->Fill(part_id[i]);
+      part_id2h->Fill(part_id[i]);
+      pth->Fill(pt[i]);
+      rapidityh->Fill(rapidity[i]);
+      phih->Fill(phi[i]);
+      pxh->Fill(px[i]);
+      pyh->Fill(py[i]);
+      pzh->Fill(pz[i]);
+      xh->Fill(log10(x[i]));
+      yh->Fill(log10(y[i]));
+      zh->Fill(log10(z[i]));
+      th->Fill(log10(t[i]));
+      etah->Fill(eta[i]);	
+    } // end particle loop
+    
+//----------------------------------------- finding eccentricities ---------------------
+
+// right now we are NOT moving the x and y coord system to the center of grav
+    double eps[6]={0};      // eccentricity
+    double eps_x[6]={0};      
+    double eps_y[6]={0};
+    double epsposrap[6]={0};      // eccentricity
+    double eps_xposrap[6]={0};      
+    double eps_yposrap[6]={0};
+    double epsnegrap[6]={0};      // eccentricity
+    double eps_xnegrap[6]={0};      
+    double eps_ynegrap[6]={0};
+    double  PSI_eps[6]={0};   // reaction plane from x and y coordidates
+
+
+    double x0=0;
+    double y0=0;
+    double x0posrap=0;
+    double y0posrap=0;
+    double x0negrap=0;
+    double y0negrap=0;
+    int numusedparticles=0;	
+    int numusedparticlesposrap=0;	
+    int numusedparticlesnegrap=0;	
+    for (int i=0; i< number_particles; i++){
+      // These cuts must depend on energy?
+      if(abs(eta[i])>5.)continue;
+     if(pt[i]<ptmin)continue; // only plot participants
+      if(t[i]>tmax)continue; // AMPT only follows stuff 400*0.2 fm =80 fm
+      if(!(part_id[i]==2112||part_id[i]==2212))continue; // only look at p and n
+      //      if(abs(eta[i])<etamin)continue;  // use eta=[1.5,5] for RP (RPD)
+      numusedparticles++;
+      x0+=x[i];
+      y0+=y[i];
+      if(eta[i]>etamin){
+	numusedparticlesposrap++;
+	x0posrap+=x[i];
+	y0posrap+=y[i];
+      }
+      if(eta[i]<-etamin){
+	numusedparticlesnegrap++;
+	x0negrap+=x[i];
+	y0negrap+=y[i];
+      }
+    } // end particle loop  i 
+    x0/=double(numusedparticles);
+    y0/=double(numusedparticles);
+    x0posrap/=double(numusedparticlesposrap);    // check for zero
+    y0posrap/=double(numusedparticlesposrap);    // check for zero
+    x0negrap/=double(numusedparticlesnegrap);   // check for zero
+    y0negrap/=double(numusedparticlesnegrap);   // check for zero
+    //    cout<<" x y="<<x0<<" "<<y0<<" "<<x0posrap<<" "<<y0posrap<<" "<<x0negrap<<" "<<y0negrap<<endl;
+  x0y0h->Fill(x0,y0);  
+  x0y0posraph->Fill(x0posrap,y0posrap);
+  x0y0negraph->Fill(x0negrap,y0negrap);
+
+  // set x0 and y0 - I don't think you recenter RKS Jan 26, 2022
+  x0=0.;
+  y0=0.;
+  //  x0posrap=4.;
+  x0posrap=0.;
+  y0posrap=0.;
+  //  x0negrap=-4.;
+  x0negrap=0.;
+  y0negrap=0.;
+
+
+    double phixy=0;
+    double rsq=0;	
+    double rsqav=0;	
+
+    double phixyposrap=0;
+    double rsqposrap=0;	
+    double rsqavposrap=0;	
+
+    double phixynegrap=0;
+    double rsqnegrap=0;	
+    double rsqavnegrap=0;	
+
+    //    int numusedparticles=0;	
+    //    int numusedparticlesposrap=0;	
+    //    int numusedparticlesnegrap=0;	
+    numusedparticles=0;	
+    numusedparticlesposrap=0;	
+    numusedparticlesnegrap=0;	
+    for (int i=0; i< number_particles; i++){
+      // These cuts must depend on energy?
+      if(abs(eta[i])>5.)continue;
+      if(pt[i]<ptmin)continue; // only plot participants
+      if(t[i]>tmax)continue; // AMPT only follows stuff 400*0.2 fm =80 fm
+      if(!(part_id[i]==2112||part_id[i]==2212))continue; // only look at p and n
+      //      if(abs(eta[i])<etamin)continue;  // use eta=[1.5,5] for RP (RPD)
+      phixy=atan2(y[i],x[i]);
+      rsq=x[i]*x[i]+y[i]*y[i];
+      rsqav+=rsq;
+      numusedparticles++;
+      if(eta[i]>etamin){
+	phixyposrap=atan2(y[i]-y0posrap,x[i]-x0posrap);
+	rsqposrap=(x[i]-x0posrap)*(x[i]-x0posrap)+(y[i]-y0posrap)*(y[i]-y0posrap);
+	rsqavposrap+=rsqposrap;
+	numusedparticlesposrap++;
+      }
+      if(eta[i]<-etamin){
+	phixynegrap=atan2(y[i]-y0negrap,x[i]-x0negrap);
+	rsqnegrap=(x[i]-x0negrap)*(x[i]-x0negrap)+(y[i]-y0negrap)*(y[i]-y0negrap);
+	rsqavnegrap+=rsqnegrap;
+	numusedparticlesnegrap++;
+      }
+      
+      phixyh->Fill(phixy); 
+      phixyposraph->Fill(phixyposrap);
+      phixynegraph->Fill(phixynegrap);
+
+      rsqh->Fill(rsq); 
+      rsqposraph->Fill(rsqposrap); 
+      rsqnegraph->Fill(rsqnegrap); 
+
+      for(int nn=0; nn<6 ; nn++){
+	int nharmonic=nn+1;
+	eps_x[nn]+=rsq*cos(nharmonic*phixy);
+	eps_y[nn]+=rsq*sin(nharmonic*phixy);    
+	if(eta[i]>etamin){
+	  eps_xposrap[nn]+=rsqposrap*cos(nharmonic*phixyposrap);
+	  eps_yposrap[nn]+=rsqposrap*sin(nharmonic*phixyposrap);
+	}
+	if(eta[i]<-etamin){
+	  eps_xnegrap[nn]+=rsqnegrap*cos(nharmonic*phixynegrap);
+	  eps_ynegrap[nn]+=rsqnegrap*sin(nharmonic*phixynegrap);	
+	}
+      } //nn
+    } // end particle loop  i 
+
+    rsqav/=double(numusedparticles);
+    rsqavposrap/=double(numusedparticlesposrap);    // check for zero
+    rsqavnegrap/=double(numusedparticlesnegrap);   // check for zero
+
+    rsqavh->Fill(rsqav);
+    rsqavposraph->Fill(rsqavposrap); 
+    rsqavnegraph->Fill(rsqavnegrap); 
+
+    for(int nn=0; nn<6 ; nn++){
+      int nharmonic=nn+1;
+      PSI_eps[nn]=atan2(eps_y[nn],eps_x[nn])/nharmonic;
+      
+      eps_x[nn]/=double(numusedparticles); // check for zero
+      eps_y[nn]/=double(numusedparticles); // check for zero
+      eps[nn]=sqrt(eps_x[nn]*eps_x[nn]+eps_y[nn]*eps_y[nn])/rsqav;
+
+      eps_xposrap[nn]/=double(numusedparticlesposrap); // check for zero
+      eps_yposrap[nn]/=double(numusedparticlesposrap); // check for zero
+      epsposrap[nn]=sqrt(eps_xposrap[nn]*eps_xposrap[nn]+eps_yposrap[nn]*eps_yposrap[nn])/rsqavposrap;
+     eps_xnegrap[nn]/=double(numusedparticlesnegrap); // check for zero
+      eps_ynegrap[nn]/=double(numusedparticlesnegrap); // check for zero
+      epsnegrap[nn]=sqrt(eps_xnegrap[nn]*eps_xnegrap[nn]+eps_ynegrap[nn]*eps_ynegrap[nn])/rsqavnegrap;
+
+    }
+    //    cout<<" eps 1 2 3 ="<< eps[0]<<" "<<eps[1]<<" "<<eps[2]<<" "<<endl;
+    eps1h->Fill(eps[1-1]);
+    eps2h->Fill(eps[2-1]);
+    eps3h->Fill(eps[3-1]);
+    eps4h->Fill(eps[4-1]);
+    eps5h->Fill(eps[5-1]);
+    eps6h->Fill(eps[6-1]);
+
+  eps1posraph->Fill(epsposrap[1-1]); 
+  eps2posraph->Fill(epsposrap[2-1]); 
+  eps3posraph->Fill(epsposrap[3-1]); 
+  eps4posraph->Fill(epsposrap[4-1]); 
+  eps5posraph->Fill(epsposrap[5-1]); 
+  eps6posraph->Fill(epsposrap[6-1]); 
+
+  eps1negraph->Fill(epsnegrap[1-1]); 
+  eps2negraph->Fill(epsnegrap[2-1]); 
+  eps3negraph->Fill(epsnegrap[3-1]); 
+  eps4negraph->Fill(epsnegrap[4-1]); 
+  eps5negraph->Fill(epsnegrap[5-1]); 
+  eps6negraph->Fill(epsnegrap[6-1]); 
+ 
+    /*
+    double PSI_eps1posrap=atan2(eps_yposrap[0],eps_xposrap[0])/1;
+    double PSI_eps1negrap=atan2(eps_ynegrap[0],eps_xnegrap[0])/1;
+    double PSI_eps2posrap=atan2(eps_yposrap[1],eps_xposrap[1])/2;
+    double PSI_eps2negrap=atan2(eps_ynegrap[1],eps_xnegrap[1])/2;
+    double PSI_eps3posrap=atan2(eps_yposrap[2],eps_xposrap[2])/3;
+    double PSI_eps3negrap=atan2(eps_ynegrap[2],eps_xnegrap[2])/3;
+    */    
+/*
+    PSI_eps1h->Fill(PSI_eps[1-1]);
+    PSI_eps2h->Fill(PSI_eps[2-1]);
+    PSI_eps3h->Fill(PSI_eps[3-1]);
+    PSI_eps4h->Fill(PSI_eps[4-1]);
+
+    PSI_eps1_roth->Fill(PSI_eps[1-1],rot);
+    PSI_eps2_roth->Fill(PSI_eps[2-1],rot);
+    PSI_eps3_roth->Fill(PSI_eps[3-1],rot);
+    PSI_eps4_roth->Fill(PSI_eps[4-1],rot);
+
+    PSI_eps1posraph->Fill(PSI_eps1posrap);
+    PSI_eps1negraph->Fill(PSI_eps1negrap);
+    PSI_eps2posraph->Fill(PSI_eps2posrap);
+    PSI_eps2negraph->Fill(PSI_eps2negrap);
+    PSI_eps3posraph->Fill(PSI_eps3posrap);
+    PSI_eps3negraph->Fill(PSI_eps3negrap);
+*/
+
+//----------------------------------------- end finding eccentricities ---------------------
+
+    //Finding reaction plane
+    double Qx[6]={0};      // used to find the reaction plane
+    double Qy[6]={0};
+    double Qxposrap[6]={0};      // used to find the reaction plane
+    double Qyposrap[6]={0};
+    double Qxnegrap[6]={0};      // used to find the reaction plane
+    double Qynegrap[6]={0};
+  
+    double Weight=1;
+    for (int i=0; i< number_particles; i++){
+      //      if(t[i]>tmax)continue; // AMPT only follows stuff 400*0.2 fm =80 fm - leave out cut - allow decays
+      // These cuts must depend on energy?
+      if(abs(eta[i])>5)continue;
+      //      if(abs(eta[i])<1.5)continue;  // use eta=[1.5,5] for RP (RPD)
+      for(int nn=0; nn<6 ; nn++){
+	int nharmonic=nn+1;
+	Weight=1;
+	if(nharmonic==1 || nharmonic==3){
+	  Weight=eta[i];
+	  //	  Weight=1;
+	}
+	Qx[nn]+=Weight*cos(nharmonic*phi[i]);
+	Qy[nn]+=Weight*sin(nharmonic*phi[i]);
+	Weight=1;
+	if(eta[i]>0.)Qxposrap[nn]+=Weight*cos(nharmonic*phi[i]);
+	if(eta[i]>0.)Qyposrap[nn]+=Weight*sin(nharmonic*phi[i]);
+	if(eta[i]<0.)Qxnegrap[nn]+=Weight*cos(nharmonic*phi[i]);
+	if(eta[i]<0.)Qynegrap[nn]+=Weight*sin(nharmonic*phi[i]);
+
+      }
+    } // end particle loop
+    for(int nn=0; nn<6 ; nn++){
+      int nharmonic=nn+1;
+      PSI[nn]=atan2(Qy[nn],Qx[nn])/nharmonic;
+    }
+    double PSI1posrap=atan2(Qyposrap[0],Qxposrap[0])/1;
+    double PSI1negrap=atan2(Qynegrap[0],Qxnegrap[0])/1;
+    double PSI2posrap=atan2(Qyposrap[1],Qxposrap[1])/2;
+    double PSI2negrap=atan2(Qynegrap[1],Qxnegrap[1])/2;
+    double PSI3posrap=atan2(Qyposrap[2],Qxposrap[2])/3;
+    double PSI3negrap=atan2(Qynegrap[2],Qxnegrap[2])/3;
+    
+    PSI1h->Fill(PSI[1-1]);
+    PSI2h->Fill(PSI[2-1]);
+    PSI3h->Fill(PSI[3-1]);
+    PSI4h->Fill(PSI[4-1]);
+
+    PSI1_roth->Fill(PSI[1-1],rot);
+    PSI2_roth->Fill(PSI[2-1],rot);
+    PSI3_roth->Fill(PSI[3-1],rot);
+    PSI4_roth->Fill(PSI[4-1],rot);
+
+    PSI1posraph->Fill(PSI1posrap);
+    PSI1negraph->Fill(PSI1negrap);
+    PSI2posraph->Fill(PSI2posrap);
+    PSI2negraph->Fill(PSI2negrap);
+    PSI3posraph->Fill(PSI3posrap);
+    PSI3negraph->Fill(PSI3negrap);
+
+  } // end event loop 2
+
+  cout<<" bmin frac="<<float(nevbmin)/float(nev)<<" bmax frac="<<float(nevbmax)/float(nev)<<endl;
+    
+  //===============================3==============================
+  // event loop 3 Find vn's using reaction plane
+  double vsumtot_a[6][6]={0};   // sum over all events, all particles [harmonic,RP]
+  int nvsumtot_a=0; // count over all events, all partices
+  for(int iev=0; iev<nev; iev++){
+    if(iev%ncount==0)cout<<" 3 eventnum="<<iev<<endl;
+    if(ntodo>0 && iev > ntodo)break;
+
+    eventnum=eventnum_v[iev];
+    number_particles=number_particles_v[iev];
+    b_impact=b_impact_v[iev];
+    npart_proj=npart_proj_v[iev];
+    npart_targ=npart_targ_v[iev];
+    nelas_proj=nelas_proj_v[iev];
+    ninelas_proj=ninelas_proj_v[iev];
+    nelas_targ=nelas_targ_v[iev];
+    ninelas_targ=ninelas_targ_v[iev];
+    part_id=part_id_v[iev];
+    px=px_v[iev];
+    py=py_v[iev];
+    pz=pz_v[iev];
+    mass=mass_v[iev];
+    x=x_v[iev];
+    y=y_v[iev];
+    z=z_v[iev];
+    t=t_v[iev];
+    energy=energy_v[iev];
+    pt=pt_v[iev];
+    rapidity=rapidity_v[iev];
+    phi=phi_v[iev];
+    eta=eta_v[iev];
+
+    if(b_impact<bmin || b_impact>bmax)continue;
+    
+    double vsum_a[6][6]={0};  // sum over all particles [harmonic,RP]
+    int nvsum_a=0; // count over all partices  
+
+    for (int i=0; i< number_particles; i++){
+      if(abs(eta[i])>5)continue;
+      if(abs(eta[i])>1.)continue; // only calculate v's for eta=[-1,1]
+     
+      for(int nn=0; nn<6 ; nn++){
+	int nharmonic=nn+1;	
+	for(int mm=0; mm<6 ; mm++){
+	  int mRP=mm+1;
+	  if(nharmonic%mRP != 0)continue;  // for PSI2 can only do nharmonic 2,4,6 etc
+	  vsum_a[nn][mm]+=cos(nharmonic*(phi[i]-PSI[mm])); 
+	  vsumtot_a[nn][mm]+=cos(nharmonic*(phi[i]-PSI[mm])); 
+	  double costerm=cos(nharmonic*(phi[i]-PSI[mm]));
+	  //	  cout<<" cos term="<<costerm<<endl;
+	  if(nharmonic==2 & mRP==2)costermh->Fill(costerm);
+	}
+      }
+      nvsum_a++;
+      nvsumtot_a++;
+    } // end particle loop
+    for(int nn=0; nn<6 ; nn++){
+      int nharmonic=nn+1;
+      for(int mm=0; mm<6 ; mm++){
+	int mRP=mm+1;
+	vsum_a[nn][mm]/=nvsum_a;
+      }
+    }
+    v1_RP1h->Fill(vsum_a[1-1][1-1]);
+    v2_RP1h->Fill(vsum_a[2-1][1-1]);
+    v3_RP1h->Fill(vsum_a[3-1][1-1]);
+    v4_RP1h->Fill(vsum_a[4-1][1-1]);
+    v5_RP1h->Fill(vsum_a[5-1][1-1]);
+    v6_RP1h->Fill(vsum_a[6-1][1-1]);
+    v2_RP2h->Fill(vsum_a[2-1][2-1]);
+    v4_RP2h->Fill(vsum_a[4-1][2-1]);
+    v6_RP2h->Fill(vsum_a[6-1][2-1]);
+    v3_RP3h->Fill(vsum_a[3-1][3-1]);
+    v6_RP3h->Fill(vsum_a[6-1][3-1]);
+    
+  } // end event loop 3
+  
+  for(int nn=0; nn<6 ; nn++){
+    int nharmonic=nn+1;
+    for(int mm=0; mm<6 ; mm++){
+      int mRP=mm+1;
+      vsumtot_a[nn][mm]/=nvsumtot_a;
+    }
+  }
+  if(i_inject>0)cout<<endl<<" injected flow  v1="<<v_injected[0]<<" v2="<<v_injected[1]<<" v3="<<v_injected[2]<<" v4="<<v_injected[3]<<" v5="<<v_injected[4]<<" v6="<<v_injected[5]<<endl<<endl;
+  cout<<" v1_rp1="<<vsumtot_a[1-1][1-1]<<endl;
+  cout<<" v2_RP1="<<vsumtot_a[2-1][1-1]<<endl;
+  cout<<" v3_RP1="<<vsumtot_a[3-1][1-1]<<endl;
+  cout<<" v4_RP1="<<vsumtot_a[4-1][1-1]<<endl;
+  cout<<" v5_RP1="<<vsumtot_a[5-1][1-1]<<endl;
+  cout<<" v6_RP1="<<vsumtot_a[6-1][1-1]<<endl;
+  cout<<" v2_RP2="<<vsumtot_a[2-1][2-1]<<endl;
+  cout<<" v4_RP2="<<vsumtot_a[4-1][2-1]<<endl;
+  cout<<" v6_RP2="<<vsumtot_a[6-1][2-1]<<endl;
+  cout<<" v3_RP3="<<vsumtot_a[3-1][3-1]<<endl;
+  cout<<" v6_RP3="<<vsumtot_a[6-1][3-1]<<endl;
+  
+
+  //===============================4==============================
+  // event loop 4 Find vn's using cumulants
+  double bb2bb[6]={0};
+  double W2sum=0;
+  double c_2[6]={0};  // _2 refers to cumulant order [nn] refers to v1,v2,v3,..
+  double v_2[6]={0};
+  double bb4bb[6]={0};
+  double W4sum=0;
+  double c_4[6]={0};  // _4 refers to cumulant order [nn] refers to v1,v2,v3,..
+  double v_4[6]={0};
+  for(int iev=0; iev<nev; iev++){
+    if(iev%ncount==0)cout<<" 4 eventnum="<<iev<<endl;
+    if(ntodo>0 && iev > ntodo)break;
+    
+    eventnum=eventnum_v[iev];
+    number_particles=number_particles_v[iev];
+    b_impact=b_impact_v[iev];
+    npart_proj=npart_proj_v[iev];
+    npart_targ=npart_targ_v[iev];
+    nelas_proj=nelas_proj_v[iev];
+    ninelas_proj=ninelas_proj_v[iev];
+    nelas_targ=nelas_targ_v[iev];
+    ninelas_targ=ninelas_targ_v[iev];
+    part_id=part_id_v[iev];
+    px=px_v[iev];
+    py=py_v[iev];
+    pz=pz_v[iev];
+    mass=mass_v[iev];
+    x=x_v[iev];
+    y=y_v[iev];
+    z=z_v[iev];
+    t=t_v[iev];
+    energy=energy_v[iev];
+    pt=pt_v[iev];
+    rapidity=rapidity_v[iev];
+    phi=phi_v[iev];
+    eta=eta_v[iev];
+    
+    if(b_impact<bmin || b_impact>bmax)continue; 
+    
+    TComplex Qnharmonic[12]={0};       
+
+    for (int i=0; i< number_particles; i++){
+      //      if(t[i]>tmax)continue; // AMPT only follows stuff 400*0.2 fm =80 fm - leavve out cut allow decays
+      if(abs(eta[i])>5)continue;
+      // calculate Qvectors
+      for(int j=0; j<12; j++){
+	Qnharmonic[j]+=TComplex(cos((j+1)*phi[i]),sin((j+1)*phi[i]),false); 
+      }
+    } // end particle loop
+
+    //    cout<<" number_particles="<<number_particles<<endl;
+    // now figure out up to nn=6
+    // 2nd order cumulant
+    double q2[6]={0};
+    double b2b[6]={0};
+    double W2=number_particles*(number_particles-1);
+    W2sum+=W2;  
+    for(int nn=0; nn<6; nn++){
+      int nharmonic=nn+1;
+      q2[nn]=Qnharmonic[nn].Rho2();// Q_nharmonic^2
+      b2b[nn]=(q2[nn]-number_particles)/number_particles/(number_particles-1);
+      //      cout<<"1 nn="<<nn<<" q2="<<q2[nn]<<" b2b="<<b2b[nn]<<" W2="<<W2<<endl;
+      bb2bb[nn]+=W2*b2b[nn];
+    }
+
+    // 4th order cumulant
+    double q4[6]={0};
+    double q2n2[6]={0};
+    double q2nnstarnstar[6]={0};    
+    double b4b[6]={0};
+    //   double W4=number_particles*(number_particles-1)*(number_particles-2)*(number_particles-3);
+    //   cout<<" 1 W4="<<W4;     // VERY WEIRD PROBLEM 1 W4 and 2 W4 are not equal
+    double W4=0;
+    W4=number_particles*(number_particles-1); //TEST
+    W4*=(number_particles-2)*(number_particles-3); // TEST
+    //    cout<<" 2 W4="<<W4<<endl;
+    W4sum+=W4;  
+    for(int nn=0; nn<6; nn++){
+      int nharmonic=nn+1;
+      q4[nn]=q2[nn]*q2[nn];// Q_nharmonic^4
+      q2n2[nn]=Qnharmonic[2*nharmonic-1].Rho2();// Q_2*nharmonic^2
+      TComplex tmpc=Qnharmonic[2*nharmonic-1]*TComplex::Conjugate(Qnharmonic[nharmonic-1])*TComplex::Conjugate(Qnharmonic[nharmonic-1]);
+      q2nnstarnstar[nn]=tmpc.Re();
+      b4b[nn] = q4[nn]+q2n2[nn]-2*q2nnstarnstar[nn]-2*2*(number_particles-2)*q2[nn]+2*number_particles*(number_particles-3);
+      b4b[nn]=b4b[nn]/(number_particles*(number_particles-1)*(number_particles-2)*(number_particles-3));
+      bb4bb[nn]+=W4*b4b[nn];
+    }
+  } // end event loop 4
+  cout<<" W2sum="<<W2sum<<endl;
+  for(int nn=0; nn<6; nn++){
+    int nharmonic=nn+1;
+    cout<<"2 nn="<<nn<<" bb2bb="<<bb2bb[nn]<<endl;
+    bb2bb[nn]=bb2bb[nn]/W2sum;
+    c_2[nn]=bb2bb[nn];
+    v_2[nn]=sqrt(c_2[nn]);
+    cout<<" using 2nd order cumulant nharmonic="<<nn+1<<" c_nharmonic="<<c_2[nn]<<" v_nharmonic="<<v_2[nn]<<endl;		 
+  }   
+  cout<<" W4sum="<<W4sum<<endl;
+  for(int nn=0; nn<6; nn++){
+    int nharmonic=nn+1;
+    cout<<"4 nn="<<nn<<" bb4bb="<<bb4bb[nn]<<endl;
+    bb4bb[nn]=bb4bb[nn]/W4sum;
+    c_4[nn]=bb4bb[nn]-2*bb2bb[nn]*bb2bb[nn];
+    v_4[nn]=sqrt(sqrt(-c_4[nn]));
+    cout<<" using 4th order cumulant nharmonic="<<nn+1<<" c_nharmonic="<<c_4[nn]<<" v_nharmonic="<<v_4[nn]<<endl;		 
+  }   
+
+  cout<<" ybeam="<<ybeam<<endl;
+  cout<<" bmin centrality="<<float(nevbmin)/float(nev)*100<<"%  bmax frac="<<float(nevbmax)/float(nev)*100<<"%"<<endl;
+  
+  //===============================================================
+  
+  cout<<" finished analysis, now write out histograms"<<endl;
+  // Open a ROOT file and save the histograms
+  //
+  TFile *myfile = new TFile("amptana3.root","RECREATE");
+  infoh->Write();
+  number_particlesh->Write();
+  b_impacth->Write();
+  n_participantsh->Write();
+  part_idh->Write();
+  part_id2h->Write();
+  
+  xh->Write();
+  yh->Write();
+  zh->Write();
+  th->Write();
+
+  ptpzh->Write();    
+  etayh->Write();     
+  xvsz_allnh->Write();     
+  xvst_allnh->Write();     
+  ptvst_allnh->Write(); 
+  etavst_allnh->Write(); 
+  rapidityvst_allnh->Write(); 
+
+  pxvst_allnh->Write();
+  pyvst_allnh->Write();
+  pzvst_allnh->Write();     
+  pxvstposrap_allnh->Write();
+  pyvstposrap_allnh->Write();
+  pzvstposrap_allnh->Write();     
+  pxvstybeam_allnh->Write();
+  pyvstybeam_allnh->Write();
+  pzvstybeam_allnh->Write();     
+  
+  cth1vst_allnh->Write();
+  cth1vstposrap_allnh->Write();
+  cth1vstybeam_allnh->Write();
+
+  cth2vst_allnh->Write();
+  cth2vstposrap_allnh->Write();
+  cth2vstybeam_allnh->Write();
+
+  cth3vst_allnh->Write();
+  cth3vstposrap_allnh->Write();
+  cth3vstybeam_allnh->Write();
+
+  xvsyh->Write();
+  zvsth->Write();
+  xvsth->Write();
+  yvsth->Write();
+  rvsth->Write();
+
+  xvsy_p_cuth->Write();
+  xvsy_p_cut2h->Write();  
+  xvszh->Write();
+  xvszybeamh->Write();
+  part_idybeamh->Write();
+  phi_p_cuth->Write();
+  phi_p_cut2h->Write();
+
+  phi_p_posraph->Write();
+  phi_p_negraph->Write();
+  xvsy_p_posraph->Write();
+  xvsy_p_negraph->Write();
+
+  xvsyallh->Write();
+  zvstallh->Write();
+  xvsyspech->Write();
+  xvszspech->Write();
+  zvstspech->Write();
+  
+  pth->Write();
+  rapidityh->Write();
+  phih->Write();
+  etah->Write();
+
+  pxh->Write();
+  pyh->Write();
+  pzh->Write();
+  
+  reactionplanerotationh->Write();  
+  PSI1h->Write();
+  PSI2h->Write();
+  PSI3h->Write();
+  PSI4h->Write();
+
+  x0y0h->Write();  
+  x0y0posraph->Write();
+  x0y0negraph->Write();
+
+  phixyh->Write(); 
+  phixyposraph->Write();
+  phixynegraph->Write();
+
+  rsqh->Write(); 
+  rsqposraph->Write(); 
+  rsqnegraph->Write(); 
+
+  rsqavh->Write();
+  rsqavposraph->Write(); 
+  rsqavnegraph->Write(); 
+
+  eps1h->Write();
+  eps2h->Write();
+  eps3h->Write();
+  eps4h->Write();
+  eps5h->Write();
+  eps6h->Write();
+
+  eps1posraph->Write(); 
+  eps2posraph->Write(); 
+  eps3posraph->Write(); 
+  eps4posraph->Write(); 
+  eps5posraph->Write(); 
+  eps6posraph->Write(); 
+
+  eps1negraph->Write(); 
+  eps2negraph->Write(); 
+  eps3negraph->Write(); 
+  eps4negraph->Write(); 
+  eps5negraph->Write(); 
+  eps6negraph->Write(); 
+ 
+  PSI1posraph->Write();
+  PSI1negraph->Write();
+  PSI2posraph->Write();
+  PSI2negraph->Write();
+  PSI3posraph->Write();
+  PSI3negraph->Write();
+
+  PSI1_roth->Write();
+  PSI2_roth->Write();
+  PSI3_roth->Write();
+  PSI4_roth->Write();  
+  
+  v1_RP1h->Write();
+  v2_RP1h->Write();
+  v3_RP1h->Write();
+  v4_RP1h->Write();
+  v5_RP1h->Write();
+  v6_RP1h->Write();
+  v2_RP2h->Write();
+  v4_RP2h->Write();
+  v6_RP2h->Write();
+  v3_RP3h->Write();
+  v6_RP3h->Write();
+  costermh->Write();
+
+  myfile->Close();
+}
+
+//====================================================================================
+// reading stuff in
+//====================================================================================
+//bool readit(int itype=0, int ido=1, int itrack=1){
+bool readit(int itype, int ido, int itrack){
+  // itype =1: ampt  2: rqmd 3: my generator
+  // ido =0:open file, 1:read event 2:read particle -1:close file
+  //  cout<<" in readit itype="<<itype<<" ido="<<ido<<endl;
+
+  static int thrownevents=0; // for itype=3
+  static int thrownparticle=0; // for itype=3
+    
+  // AMPT
+  if(itype==1){
+    if(ido==0){
+      file.open("amptdata.dat", std::fstream::in);
+      if(!file){
+	cout<<" amptdata.dat not found"<<endl;
+	return false;
+      }
+    }
+    
+    if(ido==1){
+      if(!(file>>eventnum>>testdummy>>number_particles>>b_impact>>npart_proj>>npart_targ>>nelas_proj>>ninelas_proj>>nelas_targ>>ninelas_targ>>dummy2)){
+	cout<<" reached end of file "<<endl;
+	return false;
+      }
+      //      cout<<" in readit "<<number_particles<<endl;
+
+    }
+    
+    if(ido==2){
+      if(!(file>>part_id_in>>px_in>>py_in>>pz_in>>mass_in>>x_in>>y_in>>z_in>>t_in)){
+	cout<<" reached end of file "<<endl;
+	return false;
+      }
+    }
+    
+    if(ido==-1){
+      file.close();
+      cout<<" closed input file"<<endl;
+    }
+  }
+
+  // RQMD  
+  if(itype==2){
+    if(ido==0){
+      char infile [ 200 ]; 
+      sprintf ( infile , "urqmddata.root" );
+      //      sprintf ( infile , "/home/seto/Desktop/work/programs/urqmd-3.4/data/urqmd3.4_sim_3gev_100_test_00.root");
+      Int_t nfile = 0;
+      chain = new TChain ( "Autree" );
+      nfile += chain -> Add( infile );
+      nentries = chain -> GetEntries (); std::cout << std::endl << "Added " << nfile << " files, " << "# of events is " << nentries << std::endl << std::endl;
+      if(nentries==0){
+	cout<<" input file does not exist...quitting "<<endl;
+	exit(1);
+      }
+    }
+    
+    if(ido==1){
+      //      cout<<" in readit itype=2 ido=1"<<endl;
+      chain -> GetEntry ( nev );
+      TLeaf * leaf_refmult = chain -> GetLeaf ( "tracknumber" );
+      Int_t numberOfInputTracks = leaf_refmult -> GetValue ( 0 );
+      number_particles=numberOfInputTracks;
+      // get event centrality bin
+      TLeaf * leaf_centrality = chain -> GetLeaf ( "centrality" );
+      Int_t centrality = leaf_centrality -> GetValue ( 0 );
+      
+      //  0 -  5% centrality = 1
+      //  5 - 10% centrality = 2
+      // 10 - 20% centrality = 3
+      // 20 - 30% centrality = 4
+      // 30 - 40% centrality = 5
+      // 40 - 50% centrality = 6
+      // 50 - 60% centrality = 7
+      // 60 - 70% centrality = 8
+      // 70 - 80% centrality = 9
+		
+         // read TLeaves that store track parameters
+        leaf_PID      = chain -> GetLeaf ( "PID" );
+        leaf_Charge   = chain -> GetLeaf ( "Charge" );
+        leaf_Px       = chain -> GetLeaf ( "Px" );
+        leaf_Py       = chain -> GetLeaf ( "Py" );
+        leaf_Pz       = chain -> GetLeaf ( "Pz" );
+        leaf_Pt       = chain -> GetLeaf ( "Pt" );
+        leaf_Pmag     = chain -> GetLeaf ( "Pmag" );
+        leaf_Eta      = chain -> GetLeaf ( "Eta" );
+        leaf_Phi      = chain -> GetLeaf ( "Phi" );
+        leaf_E        = chain -> GetLeaf ( "E" );
+        leaf_Rapidity = chain -> GetLeaf ( "Rapidity" );
+      
+     
+	//      cout<<" in readit "<<number_particles<<endl;
+      //      cout<<" in readit, number_particles= "<<number_particles<<endl;
+    }
+    
+    if(ido==2){
+      //      cout<<" in readit itype=2 ido=2 itrack="<<itrack<<endl;
+      // event cuts
+      if(number_particles <= 0 || number_particles > 25000){
+	cout<<" number of particles <= 0 or > 25000 -skipping event"<<endl;
+	return false;
+      }    // event cut on track numbers to prevent segmentation violation
+
+      //        if(centrality <= 0) continue;    // centrality starts at 1
+	part_id_in = leaf_PID -> GetValue ( itrack );
+	Int_t    charge = leaf_Charge -> GetValue ( itrack );
+	px_in = leaf_Px -> GetValue ( itrack );
+	py_in = leaf_Py -> GetValue ( itrack );
+	pz_in = leaf_Pz -> GetValue ( itrack );
+	Double_t     pt = leaf_Pt -> GetValue ( itrack );
+	Double_t pmag = leaf_Pmag -> GetValue ( itrack );
+	Double_t    eta = leaf_Eta -> GetValue ( itrack );
+	Double_t    phi = leaf_Phi -> GetValue ( itrack );
+	Double_t      e = leaf_E -> GetValue ( itrack );
+	Double_t      y = leaf_Rapidity -> GetValue ( itrack );
+	mass_in=sqrt(e*e-pmag*pmag);
+
+		// now change PID to standard PID
+       
+	int pidtmp=part_id_in;
+	
+	// protons
+	if(pidtmp==1 && charge == 1){part_id_in= 2212;}
+	else if(pidtmp==-1 && charge==-1){part_id_in= -2212;}
+	// neutron
+	else if(pidtmp==1 && charge == 0){part_id_in= 2112;}
+	else if(pidtmp==-1 && charge==0){ part_id_in= -2112;}
+	// pions
+	else if(pidtmp==101 && charge == 1){part_id_in= 211;}
+	else if(pidtmp==101 && charge == -1){part_id_in= -211;}
+	else if(pidtmp==101 && charge == 0){part_id_in= 111;}
+	//K
+	else if(pidtmp==106 && charge == 1){part_id_in= 321;}
+	else if(pidtmp==106 && charge == -1){part_id_in= -321;}
+	else if(pidtmp==106 && charge == 0){part_id_in= -311;}
+	else if(pidtmp==-106 && charge==0){part_id_in= 311;}
+	else if(pidtmp==-106 && charge==-1){
+	  //cout<<" pid mass charge="<<pidtmp<<" "<<mass_in<<" "<<charge<<endl;
+	  part_id_in= -321;} // this makes no sense - do some checks on this
+	//eta
+	else if(pidtmp==102 && charge == 0){part_id_in= 2211;}
+	//lambda
+	else if(pidtmp==27 && charge == 0){part_id_in= 3122;}
+	else if(pidtmp==-27 && charge == 0){part_id_in= -3122;}
+	//sigma
+	else if(pidtmp==40 && charge == 1){part_id_in= 3222;}
+	else if(pidtmp==40 && charge == -1){part_id_in= 3112;}
+	else if(pidtmp==40 && charge == 0){part_id_in= 3212;}
+	else if(pidtmp==-40 && charge == -1){part_id_in= -3222;}
+	else if(pidtmp==-40 && charge ==  1){part_id_in= -3112;}
+	else if(pidtmp==-40 && charge == 0){part_id_in= -3212;}
+	//Xsi
+	else if(pidtmp==49 && charge == 0){part_id_in= 3322;}
+	else if(pidtmp==49 && charge == -1){part_id_in= 3312;}
+	else if(pidtmp==-49 && charge == 0){part_id_in= -3322;}
+	else if(pidtmp==-49 && charge == 1){part_id_in= -3312;}
+	// Omega
+	else if(pidtmp==55 && charge == -1){part_id_in= 3334;}
+	else if(pidtmp==-55 && charge == 1){part_id_in= -3334;}
+	// D	
+	else if(pidtmp==133 && charge == 0){part_id_in= 421;}
+	else if(pidtmp==-133 && charge == 0){part_id_in= -421;}
+	else if(pidtmp==133 && charge == 1){part_id_in= 411;}
+	else if(pidtmp==-133 && charge == -1){part_id_in= -411;}
+
+	// ityp from looking a fortran code
+	// photon
+	else if(pidtmp==100 && charge == 0){part_id_in= 22;}
+	// D star for some reason
+	else if(pidtmp==134 && charge == 1){part_id_in= 413;}
+	else if(pidtmp==-134 && charge == -1){part_id_in= -413;}
+	
+	else if(pidtmp>1400){
+	  //	  cout<<" pid mass charge="<<pidtmp<<" "<<mass_in<<" "<<charge<<endl;
+	  part_id_in=pidtmp-1000;}
+	else if(pidtmp<-1400){
+	  //	  cout<<" pid mass charge="<<pidtmp<<" "<<mass_in<<" "<<charge<<endl;
+	  part_id_in=pidtmp+1000;}
+	
+	else{cout<<" rqmd input particle id mass charge="<<pidtmp<<" "<<mass_in<<" "<<charge<<endl;}
+       
+    }
+    
+    if(ido==-1){
+      file.close();
+      cout<<" closed input file"<<endl;
+    }
+  }
+
+  
+  // THROW MY OWN EVENT
+  if(itype==3){
+    
+    if(ido==0){
+      throwevent(0);
+    }
+    
+    if(ido==1){
+      throwevent(1);
+      thrownevents++;
+      thrownparticle=0;
+      eventnum=thrownevents;
+      testdummy=0;
+      number_particles=nparticles;
+      b_impact=0;
+      npart_proj=0;
+      npart_targ=0;
+      nelas_proj=0;
+      ninelas_proj=0;
+      nelas_targ=0;
+      ninelas_targ=0;
+      dummy2=0;
+      return true;
+    }
+    //      cout<<" in readit "<<number_particles<<endl;
+    
+    
+    if(ido==2){
+      //    file>>part_id_in>>px_in>>py_in>>pz_in>>mass_in>>x_in>>y_in>>z_in>>t_in
+      part_id_in=0;
+      px_in=pttrack[thrownparticle]*cos(phitrack[thrownparticle]);
+      py_in=pttrack[thrownparticle]*sin(phitrack[thrownparticle]);
+      pz_in=pttrack[thrownparticle]*sinh(ytrack[thrownparticle]);
+      mass_in=0;
+      x_in=1;
+      y_in=1;
+      z_in=1;
+      t_in=1;
+      thrownparticle++;
+      return true;
+    }
+    
+    if(ido==-1){
+      throwevent(-1);
+      return true;
+    }
+  }  
+  return true;
+}
+
+//====================================================================================
+// Throwing my own event
+//====================================================================================
+
+int throwevent(int ido){
+
+  // zero for init
+  // 1  for throw event
+
+  static bool iprintthrowevent=true;  
+  static TF1 *flowf = new TF1("flowf",fitf,0,TWOPI,5);
+  static  TRandom3 *ran0 = new TRandom3();
+  static TRandom3 *ran1 = new TRandom3();   
+  
+  static int nparticlesav=200; //100
+  static int ptdepv=0;
+  /*  
+  static double v1=0.;//0.10; //0.02   // 0.05; 
+  static double v2=0.;//0.20; //0.05   //0.15;  
+  static double v3=0.;//0.15; //0.01  //0.07;  
+  static double v4=0.;//0.05; //0.02  //0.03;  
+  */
+  /*
+  static double v1=0.02;   // 0.05; 
+  static double v2=0.05;   //0.15;  
+  static double v3=0.01;  //0.07;  
+  static double v4=0.02;  //0.03;  
+  */
+  
+  static double v1=0.10; //0.02   // 0.05; 
+  static double v2=0.20; //0.05   //0.15;  
+  static double v3=0.15; //0.01  //0.07;  
+  static double v4=0.05; //0.02  //0.03;  
+  
+  /*
+  static double v1=0.40; //0.02   // 0.05; 
+  static double v2=0.60; //0.05   //0.15;  
+  static double v3=0.30; //0.01  //0.07;  
+  static double v4=0.20; //0.02  //0.03;  
+  */
+  static double PSI2Event=0.0;
+  
+  if(ido==0){
+    cout<<" inputtype: throwevents INIT"<<endl;
+    cout<<"Initial values: v1="<<v1<<"  v2="<<v2<<"  v3="<<v3<<"  v4="<<v4
+	<<endl<<endl;
+    
+    cout<<" nparticles/event average(100) max is 10000, for pt dependence need at least 500 for T=300 MeV: ";
+    cin>>nparticlesav;
+    if(nparticlesav>10000)nparticlesav=10000;
+    cout<<" nparticles set to "<<nparticlesav<<endl;
+    
+    cout<<" pt dependent v's 0-no 1-yes: ";
+    cin>>ptdepv;
+    cout<<" ptdepv set to "<<ptdepv<<endl;
+    double PSI2=0.;
+    
+    flowf->SetParNames("PSI2","v1","v2","v3","v4");   
+    flowf->SetParameters(PSI2,v1,v2,v3,v4);
+
+    TCanvas *c1 = new TCanvas("c1","The FillRandom example",200,10,700,900);
+    c1->SetFillColor(18);
+    
+    TPad *pad1 = new TPad("pad1","The pad with the function",0.05,0.50,0.95,0.95,21);
+    TPad *pad2 = new TPad("pad2","The pad with the histogram",0.05,0.05,0.95,0.45,21);
+    pad1->Draw();
+    pad2->Draw();
+    pad1->cd();
+    
+    pad1->SetGridx();
+    pad1->SetGridy();
+    pad1->GetFrame()->SetFillColor(42);
+    pad1->GetFrame()->SetBorderMode(-1);
+    pad1->GetFrame()->SetBorderSize(5);
+    flowf->SetLineColor(4);
+    flowf->SetLineWidth(6);
+    flowf->Draw();
+    TPaveLabel *lfunction = new TPaveLabel(5,39,9.8,46,"v2 function");
+    lfunction->SetFillColor(41);
+    lfunction->Draw();
+    c1->Update();
+    //
+    // Create a one dimensional histogram (one float per bin)
+    // and fill it following the distribution in function flowf.
+    //
+    TH1D *h1f = new TH1D("h1f","Test of an Observed Distribution",200,0,TWOPI);
+    
+    pad2->cd();
+    pad2->GetFrame()->SetFillColor(42);
+    pad2->GetFrame()->SetBorderMode(-1);
+    pad2->GetFrame()->SetBorderSize(5);
+    h1f->SetFillColor(45);
+    h1f->FillRandom("flowf",1000000);
+    h1f->Draw();
+    c1->Update();
+    
+    // the previous stuff was just for illustration
+  }  //init
+
+
+  if(ido==1){
+
+    if(iprintthrowevent)cout<<" inputtype: throwevents THROWEVENT"<<endl;       
+    iprintthrowevent=false;
+    //   nparticles=nparticlesav;
+   nparticles=ran0->Poisson(nparticlesav);
+   if(nparticles<nparticlesmin)cout<<" nparticles small "<<nparticles<<endl;
+
+   //double PSI2Event=0.0;
+        PSI2Event=-0.2; // for testing
+     //     PSI2Event=ran0->Rndm()*TWOPI-PI;
+
+     //     PSI2h->Fill(PSI2Event);
+     //     PSI2PSI2foundh->Fill(PSI2Event);
+       
+
+     flowf->SetParameters(PSI2Event,v1,v2,v3,v4); // for testing &&&
+       
+     for(int i=0; i<nparticles;i++){
+       pttrack[i]=gRandom->Exp(0.300);  // .250 GeV tau
+       //       pttrack[i]=gRandom->Rndm()*2.;  // flat in pt
+       pttrack[i]+=0.180;
+       double vv1=v1;
+       double vv2=v2;
+       double vv3=v3;
+       double vv4=v4;
+       
+       double ppt=pttrack[i];
+       if(ppt>1.)ppt=1;
+       vv1=ppt*v1;
+       vv2=ppt*v2;
+       vv3=ppt*v3;
+       vv4=ppt*v4;
+       
+       if(ptdepv)flowf->SetParameters(PSI2Event,vv1,vv2,vv3,vv4);      
+       //       if(!ptdepv)flowf->SetParameters(PSI2Event,v1,v2,v3,v4); // for testing &&&
+       
+       phitrack[i]=flowf->GetRandom();
+       ytrack[i]=(gRandom->Rndm()-.5)*5; // flat over 5 units of rapidity
+       //      ytrack[i]=1.; // set all y to 1 now
+        //       if(phitrack[i]>1. && phitrack[i]<1.9)i--; // mess up acceptance
+      }
+
+  return nparticles;       
+  }
+  if(ido==-1){
+    cout<<" For THROWEVENT input values for v1="<<v1<<" v2="<<v2<<" v3="<<v3<<" v4="<<v4<<endl;
+  }
+  return nparticles;       
+}
+
+Double_t fitf(Double_t *xx,Double_t *par) {
+  double v1=par[1];
+  double v2=par[2];
+  double v3=par[3];
+  double v4=par[4];
+  double PSI=par[0];
+  
+  double x=xx[0];  
+
+  double  fitval = 1./TWOPI*(
+			     1.+2*v1*cos(1*(x-PSI))+2*v2*cos(2*(x-PSI))+2*v3*cos(3*(x-PSI))+2*v4*cos(4*(x-PSI))
+			     );  
+  return fitval;
+}
+

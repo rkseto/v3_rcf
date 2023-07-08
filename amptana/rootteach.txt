@@ -1,0 +1,504 @@
+.x Fun4All_DynamicRange.C (3000, "dst.root")
+TFile *_file0 = TFile::Open("output.root")
+.ls
+hcalib_energy->Draw("colz")
+hcalib_energy->ProjectionY()->Draw()
+hcalib_energy->SetAxisRange(50,60)
+hcalib_energy->ProjectionY()->Draw()
+hcalib_energy->ProjectionY()->Rebin(2)
+hcalib_energy->SetAxisRange(20,30)
+hcalib_energy->ProjectionY()->Rebin(2)
+hcalib_energy->ProjectionY()->Draw()
+.q
+hcalib_energy->Draw("colz")
+hcalib_energy->ProjectionY()->Draw()
+hcalib_energy->Draw("colz")
+hcalib_energy->SetAxisRange(50,60)
+hcalib_energy->ProjectionY()->Draw()
+hcalib_energy->SetAxisRange(90, 100)
+hcalib_energy->ProjectionY()->Draw()
+hcalib_energy->SetAxisRange(10, 20)
+hcalib_energy->ProjectionY()->Draw()
+gPad->SetLogy()
+hhigh_adc4->Draw()
+hzero_suppressed_miploss0->Draw()
+hzero_suppressed_miploss0->Draw("colz")
+hzero_suppressed_miploss0->Draw("colz")
+hzero_suppressed_miploss0->ProjectionY()->Draw()
+hzero_suppressed_miploss8->ProjectionY()->Draw()
+gPad->SetLogy()
+hzero_suppressed_miploss8->ProjectionY()->SetMarkerStyle(22)
+hzero_suppressed_miploss8->ProjectionY()->SetMarkerColor(kRed)
+hzero_suppressed_miploss8->ProjectionY()->Draw("p")
+hzero_suppressed_miploss8->ProjectionY()->SetMarkerStyle(22)
+hzero_suppressed_miploss8->ProjectionY()->SetMarkerStyle(23)
+hzero_suppressed_miploss8->ProjectionY()->SetMarkerStyle(21)
+hzero_suppressed_miploss7->ProjectionY()->SetMarkerStyle(21)
+hzero_suppressed_miploss7->ProjectionY()->Draw()
+hzero_suppressed_miploss7->ProjectionY()->SetMarkerStyle(21)
+hzero_suppressed_miploss6->ProjectionY()->SetMarkerStyle(21)
+hzero_suppressed_miploss6->ProjectionY()->Draw()
+hzero_suppressed_miploss6->ProjectionY()->SetMarkerStyle(21)
+hzero_suppressed_miploss6->ProjectionY()->Draw()
+hzero_suppressed_miploss6->ProjectionY()->SetMarkerStyle(21)
+hzero_suppressed_miploss8->Draw("colz")
+gPad->SetLogy()
+hoverflow4->ProjectionY()->SetMarkerStyle(22)
+hoverflow4->SetAxisRange(90,100)
+hoverflow4->ProjectionY()->Draw()
+hoverflow4->ProjectionY()->SetMarkerStyle(22)
+hoverflow5->SetAxisRange(90,100)
+hoverflow5->ProjectionY()->Draw()
+gPad->SetLogy()
+hoverflow5->ProjectionY()->SetMarkerStyle(22)
+hoverflowe->ProjectionY()->Draw()
+hoverflow3->ProjectionY()->Draw()
+hoverflow3->ProjectionY()->SetMarkerStyle(22)
+hoverflow3->SetAxisRange(50,60)
+hoverflow3->ProjectionY()->Draw()
+hoverflow3->ProjectionY()->SetMarkerStyle(22)
+hoverflow3->SetAxisRange(90,100)
+hoverflow3->ProjectionY()->Draw()
+hoverflow3->ProjectionY()->SetMarkerStyle(22)
+hoverflow3->SetAxisRange(20,30)
+hoverflow8->SetAxisRange(20,30)
+hoverflow8->ProjectionY()->Draw()
+gPad->SetLogy()
+hoverflow8->ProjectionY()->SetMarkerStyle(22)
+hoverflow8->SetAxisRange(50,60)
+hoverflow8->ProjectionY()->Draw()
+hoverflow8->ProjectionY()->SetMarkerStyle(22)
+hoverflow8->SetAxisRange(90,100)
+hoverflow8->ProjectionY()->Draw()
+hoverflow8->ProjectionY()->SetMarkerStyle(22)
+.q
+TFile *_file0 = TFile::Open("output.root")
+gPad->SetLogy()
+hzero_suppressed_miploss8->ProjectionY()->SetMarkerStyle(22)
+hzero_suppressed_miploss6->ProjectionY()->SetMarkerStyle(22)
+hzero_suppressed_miploss6->ProjectionY()->Draw()
+hzero_suppressed_miploss6->ProjectionY()->SetMarkerStyle(22)
+hzero_suppressed_miploss7->ProjectionY()->Draw()
+hzero_suppressed_miploss7->ProjectionY()->SetMarkerStyle(22)
+.q
+.x Fun4All_DynamicRange.C (15, "dst.root")
+.x Fun4All_DynamicRange.C (1500, "dst.root")
+.x Fun4All_DynamicRange.C (1500, "dst.root")
+TFile *_file0 = TFile::Open("output_milap.root")
+.ls
+hcalib_energy->Draw("colz")
+.q
+.x Fun4All_DynamicRange.C (1500, "dst.root")
+TFile *_file0 = TFile::Open("output_overflow.root")
+.ls
+hcalib_energy->Draw("colz")
+.q
+TFile *_file0 = TFile::Open("output_milap.root")
+.ls
+hcalib_energy->ProjectionY()->Draw()
+.q
+TFile *_file0 = TFile::Open("output_nooverflow.root")
+hcalib_energy->ProjectionY()->Draw()
+.q
+TFile *_file0 = TFile::Open("output_overflow.root")
+hcalib_energy->ProjectionY()->Draw()
+TFile fin("output_nooverflow.root")
+TH1 *h1 = fin.Get("hcalib_energy")
+h1->SetLineColor(kRed)
+TH2 *h1 = fin.Get("hcalib_energy")
+TH2 *h2 = fin.Get("hcalib_energy")
+h2->ProjectionY()->SetLineColor(kRed)
+h2->ProjectionY()->Draw("same")
+.q
+.x Fun4All_DynamicRange.C (1500, "dst.root")
+
+
+PlotCellID(1)
+Plot1D("PLength",1)
+IsEverythingAwesome(1,1)
+IsEverythingAwesome(1,3114)
+.x AnalyzeRoot.C("MpcExPlay0422879.root")
+PlotADC(1)
+PlotCellID(1)
+.q
+.x MpcExDataPlot.C("junkdata/rc-0422886-MPCEX.S-0.prdf",0,"0422886")
+.x AnalyzeRoot.C("MpcExPlay0422886.root", "0422886")
+PacketNorth21301->ProjectionY("hy",62)
+PacketNorth21301->ProjectionY("hy2",50)
+hy->Draw()
+PacketNorth21301->ProjectionY("hy2",50, 50)
+hy2->Draw()
+.q
+.x Pedestals.C
+2*12*128
+2*2*12*128
+2*2*12*128/2
+2*2*12*129/2
+2*2*12*128/2
+.q
+
+0x00331122&0x00002200 >> 8
+(0x00331122>>8)&0x00002200
+(0x00331122>>8)&0x0000FF00
+(0x00331122>>8)
+(0x00331122 >> 8)
+(0x00331122 >> 8)%int(512)
+(0x00331122 >> 2)%int(512)
+(0x00001122 >> 2)%int(512)
+(0x00331122 >> 2)%int(512)
+(0x00331122 >> 8)%int(512)
+0x33
+(0x00331122 >> 8)%int(256)
+(0x00331122 >> 16)%int(256)
+(0x00331122 >> 32)%int(256)
+(0x00331122 >> 24)%int(256)
+int te = 0xFFFFFFFF
+te
+long int te = 0xFFFFFFFF
+long int te1 = 0xFFFFFFFF
+te1
+long te2 = 0xFFFFFFFF
+te2
+ULong_t te2u = 0xFFFFFFFF
+te2u
+UInt_t te2ui = 0xFFFFFFFF
+te2ui\
+te2ui
+unsigned int yi = 0xFFFFFFFF
+yi
+unsigned int yi = 0x11223344
+(0x00331122 >> 0)%int(256)
+0x44
+(yi >> 0)%int(256)
+(yi >> 8)%int(256)
+0x33
+(yi >> 16)%int(256)
+0x22
+(yi >> 24)%int(256)
+0x11
+yi=0
+yi=yi&(1)
+yi
+yi=yi+(1)
+yi
+yi=0
+(yi<<0)|31
+yi
+yi = (yi<<0)|31
+yi = (yi<<4)|2
+(yi >> 0)%int(256)
+(yi >> 0)%int(128)
+(yi >> 4)%int(256)
+(yi >> 8)%int(256)
+(yi >> 0)%int(256)
+yi=0
+yi = (yi&31)<<0
+yi
+yi = (yi&31)
+pow(2,8)
+pow(16,8)
+pow(16,7)
+yi = (0x000000FF&31)
+yi = (0x000000FF&31)<<0
+yi = (0x000000FF&31)<<0 | (0x0000FF00&171)<<4
+yi
+yi = (0x0000FF00&171)<<4
+yi = (0x0000FF00&171)
+yi = (0x000000FF&171)<<4
+yi = (0x000000FF&31)<<0 | (0x000000FF&171)<<4
+(yi >> 0)%int(256)
+(yi >> 4)%int(256)
+(yi)%int(256)
+yi = (0x000000FF&0)<<0 | (0x000000FF&171)<<4
+(yi >> 4)%int(256)
+(yi)%int(256)
+(yi>>2)%int(256)
+(yi>>4)%int(256)
+(yi>>8)%int(256)
+yi=0
+yi = (0x000000FF&0)<<0 | (0x000000FF&171)<<4
+(yi>>4)%int(256)
+yi = (0x000000FF&216)<<8 | (0x000000FF&171)<<4
+(yi>>4)%int(256)
+(yi>>8)%int(256)
+(yi>>9)%int(256)
+(yi>>7)%int(256)
+(yi>>8)%int(256)
+0xF2
+0xE2
+0xD4
+0xD8
+0x000000FF&0xD8
+0xFF&0xD8
+0xFF&0xD8<<2
+0xFF&0xD8>>2
+(0xFF&0xD8)>>2
+(0xFF&0xD8)<<2
+0xD800
+(0xFF&0xD8)<<4
+(0xFF&0xD8)<<8
+yi = (0x000000FF&216)<<16 | (0x000000FF&171)<<8
+(yi>>8)%int(256)
+(yi>>16)%int(256)
+(yi>>0)%int(256)
+.x Fun4All_MpcExPisaReader.C
+.q
+.x Fun4All_MpcExPisaReader.C
+.q
+.x Fun4All_MpcExPisaReader.C
+.q
+.x Fun4All_MpcExPisaReader.C
+.q
+TFile *_file0 = TFile::Open("test.root")
+.ls
+T->Print()
+.q
+.x Fun4All_MpcExPisaReader.C(1000)
+.q
+255611
+2300000./255611
+.q
+.x Fun4All_MpcExPisaReader.C(1000)
+.q
+755630
+.q
+.x Fun4All_MpcExPisaReader.C(1000)
+.!ls -l
+2409923
+2409923/1000.
+755630
+(2409923-755630)/255611.
+sizeof(unsigned short)
+sizeof(unsigned byte)
+byte
+.
+.q
+.x Fun4All_MpcExPisaReader.C(1000)
+/q
+.q
+.x Fun4All_MpcExPisaReader.C(1000)
+.q
+1766040/1000.
+2337296/1000.
+(3418343-1766040)/1000.
+TFile f("test_crh_mpc.root")
+T->Print()
+T->Draw("mpctowers_")
+T->Draw("mpctowers")
+T->Draw("mpctowers.mpctowers_")
+T->Draw("n_mpctowers")
+.q
+24*8*128
+24*8*128*2
+24*8*128*2*2
+.q
+.x Fun4All_MpcExPisaReader.C(1)
+TFile *_file0 = TFile::Open("test.root")
+.ls
+T->Print()
+T->Draw("mpcexhits._value")
+T->Draw("mpcexhits._value%256")
+T->Draw("mpcexhits._value/256")
+T->Draw("mpcexhits._value/256:mpcexhits._value%256")
+.q
+.x Fun4All_MpcExPisaReader.C(1000)
+.q
+.x Fun4All_MpcExPisaReader.C(1000)
+.q
+.x Fun4All_MpcExPisaReader.C(1000)
+.q
+.x Fun4All_MpcExPisaReader.C(10)
+.q
+TFile *_file0 = TFile::Open("test.root")
+T->Print()
+T->Draw("mpcexhits_")
+T->Draw("mpcexhits._value")
+.q
+TFile *_file0 = TFile::Open("test_newcrh.root")
+.ls
+T->Print()
+T->Draw("mpcexhits._value")
+T->Draw("n_mpcexhits")
+.q
+TFile f("/phenix/user02/phnxreco/mpcex/anetah/DATA/deadhot/output/calib_test_tree_out_0010000046_0000.root")
+.ls
+EventInfo->Print()
+.q
+.x drawMIPS.C
+.q
+.x drawMIPS.C
+8*6*6
+.q
+.x drawMIPS.C
+.x drawMIPS.C
+.q
+TFile *_file0 = TFile::Open("PedCalibADC.root")
+.ls
+hPedNorthHighOFF_7_5_3->Draw()
+hPedNorthHighOFF_7_5_3->ProjectionX()->Draw()
+hPedNorthHighOFF_7_5_3->ProjectionY()->Draw()
+.q
+TFile *_file0 = TFile::Open("PedCalibADC.root")
+.q
+.x drawMIPS.C
+.q
+TFile *_file0 = TFile::Open("PedCalibADC.root")
+.ls
+hPedSouthHighOFF_7_5_3->Draw("colz")
+hPedNorthHighOFF_7_5_3->ProjectionY()->Draw()
+hPedNorthHighOFF_0_5_3->ProjectionY()->Draw()
+.q
+.x drawMIPS.C
+.x drawMIPS.C
+.q
+.x drawMIPS.C
+.q
+.x drawMIPS.C
+.q
+.x drawMIPS.C
+.q
+TFile *_file0 = TFile::Open("PedSubCalib.root")
+.ls
+hPedNorthHighOFF_7_5_5->Draw()
+hPedNorthHighOFF_7_1_1->Draw()
+hPedNorthHighOFF_0_1_1->Draw()
+hPedNorthHighOFF_0_1_1->ProjectionY()->Draw()
+hPedNorthLowOFF_0_1_1->ProjectionY()->Draw()
+hPedSouthLowOFF_0_1_1->ProjectionY()->Draw()
+hPedNorthHighOFF_3_1_1->ProjectionY()->Draw()
+.q
+TFile *_file0 = TFile::Open("Raw_ADC.root")
+hPedNorthHighOFF_0_1_1->ProjectionY()->Draw()
+.q
+TFile *_file0 = TFile::Open("PedSubCalib.root")
+hPedNorthHighOFF_0_1_1->ProjectionY()->Draw()
+hPedNorthHighOFF_0_1_1->ProjectionY("p0",1,1)->Draw()
+hPedNorthHighOFF_0_1_1->ProjectionY("p0",2,2)->Draw()
+hPedNorthHighOFF_0_1_1->ProjectionY("p0",20,20)->Draw()
+.q
+.x drawMIPS.C
+.x drawMIPS.C
+ped
+ped[0][1][1][0]
+ped[0][1][1][1]
+ped[0][1][1][2]
+ped[0][1][1][3]
+ped[0][1][2][3]
+.q
+.x drawMIPS.C
+.q
+.x drawMIPS.C
+.q
+.x drawMIPS.C
+ch
+ch->Draw("MpcExCalibHitsArray._high_q")
+ch->Draw("MpcExCalibHitsArray._high_q:MpcExHitsArray._high_q")
+ch->Draw("MpcExCalibHitsArray._high_q:MpcExHitsArray._high_q","","",1)
+ch->Draw("MpcExCalibHitsArray._high_q:MpcExHitsArray._high_q","","",10)
+ch->Draw("MpcExCalibHitsArray._high_q:MpcExHitsArray._high_q","","colz",10)
+ch->Draw("MpcExCalibHitsArray._int_key:MpcExHitsArray._int_key","","",10)
+ch->Draw("MpcExCalibHitsArray._int_key-MpcExHitsArray._int_key","","",10)
+ch->Draw("MpcExCalibHitsArray._int_key:MpcExHitsArray._int_key","","",10)
+.q
+.x drawMIPS.C
+.q
+.x drawMIPS.C
+.q
+.x drawMIPS.C
+.
+.q
+TFile *_file0 = TFile::Open("PedSubCalib.root")
+hPedNorthHighOFF_0_1_1->ProjectionY()->Draw()
+hPedSouthHighOFF_0_1_1->ProjectionY()->Draw()
+hPedSouthHighOFF_0_1_1->ProjectionY("py",0,0)->Draw()
+hPedSouthHighOFF_0_1_1->ProjectionY("py",1,1)->Draw()
+hPedSouthHighOFF_0_1_1->ProjectionY("py",2,2)->Draw()
+py->Fit("gaus","R","same",10,25)
+hPedSouthHighOFF_0_1_1->ProjectionY("py",1,1)->Draw()
+hPedSouthHighOFF_0_1_1->ProjectionY("py",1,1)->Draw()
+py->Fit("gaus","R","same",10,25)
+py->Fit("landau","R","same",10,25)
+py->Fit("gaus","R","same",10,25)
+.ls
+hPedSouthLowOFF_0_1_1->ProjectionY("py",1,1)->Draw()
+hPedSouthLowOFF_0_1_1->ProjectionY("py")->Draw()
+hPedSouthLowOFF_7_1_1->ProjectionY("py")->Draw()
+hPedNorthLowOFF_7_1_1->ProjectionY("py")->Draw()
+hPedNorthHighOFF_7_1_1->ProjectionY("py")->Draw()
+.q
+TFile *_file0 = TFile::Open("Raw_ADC.root")
+hPedNorthHighOFF_7_1_1->ProjectionY("py")->Draw()
+hPedNorthLowOFF_7_1_1->ProjectionY("py")->Draw()
+hPedNorthLowOFF_7_1_1->ProjectionY("")->Draw()
+hPedNorthHighOFF_7_1_1->ProjectionY("")->Draw()
+hPedNorthHighOFF_0_1_1->ProjectionY("py1")->Draw("same")
+hPedNorthLowOFF_0_1_1->ProjectionY("py2")->Draw("same")
+hPedNorthHighOFF_0_1_1->ProjectionY("py1")->Draw("")
+hPedNorthLowOFF_0_1_1->ProjectionY("py2")->Draw("same")
+.! ls ../ped
+.! ls ../
+.! ls ../pedthresh
+.! ls ../pedthresh/sim_ped_file.root
+.! ls ../pedthresh/sim_ped_file.root -lh
+TFile f1("../pedthresh/sim_ped_file.root")
+f1.cd()
+hPedNorthLowOFF_0_1_1->ProjectionY("py2a")->Draw("same")
+.ls
+hPedNorthLow_0_1_1->ProjectionY("py2a")->Draw("same")
+py2a->Scale(1./2); py2a->Draw("same")
+py2a->Scale(1./2); py2a->Draw("same")
+py2a->Scale(1./2); py2a->Draw("same")
+py2->Draw()
+py2a->Draw("same")
+py2a->Scale(1./1.5); py2a->Draw("same")
+py2a->Scale(1.1); py2a->Draw("same")
+py2a->Scale(1./1.1); py2a->Draw("same")
+py2a->Scale(1./1.1); py2a->Draw("same")
+py2a->GetMaximum()
+py2->GetMaximum()
+py2->GetMaximum()/py2a->GetMaximum()
+py2a->Scale(1./1.07); py2a->Draw("same")
+py2a->Scale(1.07); py2a->Draw("same")
+py2a->Scale(1.07); py2a->Draw("same")
+py2->Add(py2a,-1)
+py2a = (TH1D *) py2a
+py2 = (TH1D *) py2
+py2->Add(py2a,-1)
+py2->Draw()
+.q
+TFile *_file0 = TFile::Open("Raw_ADC.root")
+hPedNorthLowOFF_0_1_1->ProjectionY("py2")->Draw("")
+hPedNorthHighOFF_0_1_1->ProjectionY("py2")->Draw("")
+hPedNorthLowOFF_0_1_1->ProjectionY("py2")->Draw("")
+TFile f1("../pedthresh/sim_ped_file.root")
+f1.cd()
+hPedNorthLowOFF_0_1_1->ProjectionY("ped")->Draw("same")
+hPedNorthLow_0_1_1->ProjectionY("ped")->Draw("same")
+py2a->GetMaximum()/ped->GetMaximum()
+ped->GetMaximum()
+py2a->GetMaximum()/1.50796000000000000e+05
+py2a->GetMaximum()
+py2a->GetMaximum()
+py2->GetMaximum()/1.50796000000000000e+05
+ped->Scale(8.09902119419613209e-02)
+ped->Draw()
+ped->Draw("same")
+py2->Draw()
+_file0->cd()
+py2->Draw()
+f1.cd()
+ped->Draw("same")
+py2a = (TH1D *) py2a
+py2 = (TH1D *) py2
+ped = (TH1D *) ped
+py2->Add(ped,-1)
+py2->Draw()
+ped->SetFillColor(8)
+ped->Draw("same")
+.q
+
+Int_t bin1 = xaxis->FindBin(-2.)
+Int_t bin2 = xaxis->FindBin(2.)
+xvsy_p_cuth->ProjectionX("pro1",66,86)->Draw()
+pro1->SetLineColor(2)
+pro2->Draw("SAME")

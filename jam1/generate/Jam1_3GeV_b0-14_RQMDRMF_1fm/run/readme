@@ -1,0 +1,5 @@
+1. conf.mk: control the number of jobs
+2. compile the code: make clone
+3. run the jobs: ./submit confirm
+5. the final root files are saved in Data/
+

@@ -1,0 +1,5 @@
+see ./urqmd/generate/urqmd-3.4/  and urqmd-3.4_eos2 for the code - eos2 is a version which changes the skyme parameters and allows you  to run energies > 3GeV CM
+
+see.urqmd/generate/* for running simulation and getting output
+
+see /urqmdana for reading and analyzing output
